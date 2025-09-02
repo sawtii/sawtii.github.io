@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مشغل صوت موحد</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #121212;
+  color: #fff;
+  gap: 40px;
+}
+
+/* شريط التقدم + الوقت */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  gap: 10px;
+}
+.current-time, .duration {
+  font-size: 0.9rem;
+  color: #ccc;
+  min-width: 45px;
+  text-align: center;
+}
+.progress-bar {
+  flex: 1;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #1DB954 0%, #1DB954 0%, #444 0%, #444 100%);
+  outline: none;
+  cursor: pointer;
+}
+.progress-bar::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1DB954;
+  cursor: pointer;
+  border: none;
+}
+.progress-bar::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1DB954;
+  cursor: pointer;
+  border: none;
+}
+
+/* زر التشغيل */
+.play-button {
+  width: 100px;
+  height: 100px;
+  background: #1DB954;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.play-button svg {
+  width: 45px;
+  height: 45px;
+  fill: white;
+}
+</style>
+</head>
+<body>
+
+<!-- شريط + الوقت -->
+<div class="controls">
+  <span class="current-time">0:00</span>
+  <input type="range" class="progress-bar" value="0" min="0" step="1">
+  <span class="duration">0:00</span>
+</div>
+
+<!-- زر التشغيل -->
+<div class="play-button" id="playBtn">
+  <svg viewBox="0 0 60 60" id="icon">
+    <!-- أيقونة تشغيل -->
+    <g id="playIcon">
+      <polygon points="22,15 22,45 45,30" fill="white" stroke="white" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+    <!-- أيقونة إيقاف -->
+    <g id="pauseIcon" style="display:none;">
+      <rect x="18" y="15" width="10" height="30" rx="4" fill="white"/>
+      <rect x="32" y="15" width="10" height="30" rx="4" fill="white"/>
+    </g>
+  </svg>
+</div>
+
+<!-- الملفات الصوتية -->
+<audio id="audio1" preload="metadata" controls>
+  <source src="https://api.telegram.org/file/bot8047115821:AAEaBiEbkRkbfcLEF6JszlKi9Hm3chjGN5U/music/file_3.m4a" type="audio/mp4">
+</audio>
+<audio id="audio2" preload="metadata" controls>
+  <source src="https://api.telegram.org/file/bot8047115821:AAEaBiEbkRkbfcLEF6JszlKi9Hm3chjGN5U/music/file_4.m4a" type="audio/mp4">
+</audio>
+<audio id="audio3" preload="metadata" controls>
+  <source src="https://api.telegram.org/file/bot8047115821:AAEaBiEbkRkbfcLEF6JszlKi9Hm3chjGN5U/music/file_5.m4a" type="audio/mp4">
+</audio>
+
+<script>
+const audios = [
+  document.getElementById('audio1'),
+  document.getElementById('audio2'),
+  document.getElementById('audio3')
+];
+
+const playButton = document.getElementById('playBtn');
+const progressBar = document.querySelector('.progress-bar');
+const currentTimeEl = document.querySelector('.current-time');
+const durationEl = document.querySelector('.duration');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+
+let currentAudioIndex = 0; // الصوت الحالي
+let isPlaying = false;
+let cumulativeDurations = []; // لو كل صوت 10 ثواني: arr[10,20,30]
+let totalDuration = 0; // 30
+
+// تنسيق الوقت
+function formatTime(seconds) {
+  const hrs = Math.floor(seconds / 3600);
+  const min = Math.floor((seconds % 3600) / 60);
+  const sec = Math.floor(seconds % 60);
+
+  if (hrs > 0) {
+    return `${hrs}:${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
+  } else {
+    return `${min}:${sec < 10 ? '0' + sec : sec}`;
+  }
+}
+
+// تحميل المدد
+Promise.all(
+  audios.map(a => new Promise(resolve => {
+    a.onloadedmetadata = () => resolve(a.duration || 0);
+    a.onerror = () => resolve(0);
+  }))
+).then(durations => {
+  cumulativeDurations = durations.reduce((acc, dur) => {
+    const last = acc.length ? acc[acc.length - 1] : 0;
+    acc.push(last + dur);
+    return acc;
+  }, []);
+  totalDuration = cumulativeDurations[cumulativeDurations.length -1];
+  progressBar.max = Math.floor(totalDuration);
+  durationEl.textContent = formatTime(totalDuration);
+});
+
+// زر التشغيل
+playButton.addEventListener('click', () => {
+  if(!isPlaying){
+    toPause();
+    isPlaying = true;
+    playCurrent();
+  } else {
+    pauseAll();
+    toPlay();
+    isPlaying = false;
+  }
+});
+
+function playCurrent() {
+  if(currentAudioIndex >= audios.length) {
+    // currentAudioIndex = audios.length - 1;
+    isPlaying = false;
+    toPlay();
+    return;
+  }
+
+  let audio = audios[currentAudioIndex];
+  audio.play().catch(()=>{});
+  audio.onended = () => {
+    currentAudioIndex++;
+    playCurrent();
+};
+}
+
+function pauseAll() {
+    audios.forEach(a => a.pause());
+}
+
+setInterval(() => {
+  let elapsed = 0;
+  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
+  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
+  formatTime(elapsed) != currentTimeEl.textContent ? currentTimeEl.textContent = formatTime(elapsed) : null;
+
+  let lastIndex = audios.length - 1;
+  if (
+    currentAudioIndex === lastIndex &&
+    Math.floor(audios[lastIndex].currentTime) >= Math.floor(audios[lastIndex].duration)
+  ) {
+    pauseAll();
+    toPlay();
+    isPlaying = false;
+  }
+}, 100);
+
+document.addEventListener("keydown", (e) => {
+  let audio = audios[currentAudioIndex]; // الصوت الحالي
+  
+  if (e.code === "Space") {
+    e.preventDefault(); // عشان ماينزلش صفحة
+    console.log(currentAudioIndex);
+    
+    if (audio.paused) {
+      let lastIndex = audios.length - 1;
+      if (
+        currentAudioIndex === lastIndex &&
+        Math.floor(audios[lastIndex].currentTime) >= Math.floor(audios[lastIndex].duration)
+      ) {
+        currentAudioIndex = 0;
+        audio = audios[currentAudioIndex]; // الصوت الحالي
+        audio.currentTime = 0;
+        // pauseAll();
+      }
+   
+      audio.play();
+      isPlaying = true;
+      toPause();
+    } else {
+      audio.pause();
+      isPlaying = false;
+      toPlay();
+    }
+  }
+
+  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+    e.preventDefault();
+    let step = (e.code === "ArrowRight") ? 10 : -10;
+    let value = Math.min(Math.max(0, parseFloat(progressBar.value) + step), totalDuration);
+    progressBar.value = value;
+
+    for (let i = 0; i < audios.length; i++) {
+      if (value < cumulativeDurations[i]) {
+        let prev = i === 0 ? 0 : cumulativeDurations[i - 1];
+        for (let j = i + 1; j < audios.length; j++) {
+          audios[j].currentTime = 0;
+        }
+        switchTo(i, Math.max(0, value - prev));
+        if (isPlaying) {
+          playCurrent();
+        }
+        break;
+      }
+    }
+  }
+  let elapsed = 0;
+  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
+  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
+  progressBar.value = elapsed;
+
+  let percent = (elapsed / totalDuration) * 100;
+  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+});
+
+// القفز عبر الشريط
+progressBar.addEventListener('input', () => {
+  let value = parseFloat(progressBar.value);
+  for(let i=0; i<audios.length; i++){
+    if(value < cumulativeDurations[i]){
+      let prev = i===0?0:cumulativeDurations[i-1];
+      for(let j=i+1; j<audios.length; j++) {
+        audios[j].currentTime = 0;
+      }
+      switchTo(i, Math.max(0, value - prev));
+      if(isPlaying) {
+        playCurrent();
+      }
+      break;
+    }
+  }
+
+  let elapsed = 0;
+  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
+  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
+  progressBar.value = elapsed;
+  
+  let percent = (elapsed / totalDuration) * 100;
+  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+});
+
+function switchTo(index, time) {
+  pauseAll();
+  currentAudioIndex = index;
+  audios[index].currentTime = time;
+  if(isPlaying) {
+    setTimeout(()=>audios[index].play().catch(()=>{}),50);
+  }
+}
+
+// تغيير شكل الزر
+function toPause(){
+  playIcon.style.display = "none";
+  pauseIcon.style.display = "block";
+}
+function toPlay(){
+  playIcon.style.display = "block";
+  pauseIcon.style.display = "none";
+}
+</script>
+</body>
+</html>
