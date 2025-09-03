@@ -196,7 +196,7 @@ function pauseAll() {
 setInterval(() => {
   // الشريط والوقت الحالي
   makeProgress();
-
+  console.log(currentAudioIndex);
   // وقف لو وصلت للآخر
   let lastIndex = audios.length - 1;
   if (
@@ -215,12 +215,11 @@ document.addEventListener("keydown", (e) => {
   
   if (e.code === "Space") {
     e.preventDefault(); // عشان ماينزلش صفحة
-    console.log(currentAudioIndex);
     
     if (audio.paused) {
       let lastIndex = audios.length - 1;
       if (
-        currentAudioIndex === lastIndex &&
+        currentAudioIndex >= lastIndex &&
         Math.floor(audios[lastIndex].currentTime) >= Math.floor(audios[lastIndex].duration)
       ) {
         currentAudioIndex = 0;
