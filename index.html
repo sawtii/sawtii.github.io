@@ -42,16 +42,16 @@ body {
 }
 .progress-bar::-webkit-slider-thumb {
   appearance: none;
-  width: 14px;
+  width: 24px;
   height: 14px;
-  border-radius: 50%;
-  background: #1DB954;
+  border-radius: 500px;
+  background: #f9fffb;
   cursor: pointer;
   border: none;
 }
 .progress-bar::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #1DB954;
   cursor: pointer;
@@ -207,6 +207,8 @@ setInterval(() => {
     toPlay();
     isPlaying = false;
   }
+
+  // console.log(audios[currentAudioIndex].buffered);
 }, 100);
 
 document.addEventListener("keydown", (e) => {
@@ -269,7 +271,23 @@ function makeProgress() {
   // تقدم الشريط
   let percent = (elapsed / totalDuration) * 100;
   progressBar.value = elapsed;
-  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+  progressBar.style.background = 
+  `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+
+  let bufferPercent = 0;
+  let audio = audios[currentAudioIndex];
+  let bufferedEnd = audio.buffered.length;
+  let elapsedBefore = currentAudioIndex === 0 ? 0 : cumulativeDurations[currentAudioIndex-1];
+  bufferPercent = ((elapsed + bufferedEnd) / totalDuration) * 100;
+  progressBar.style.background = `
+    linear-gradient(to right, 
+      #1DB954 0%, 
+      #3deb7a ${percent}%, 
+      #696969 ${percent}%, 
+      #696969 ${bufferPercent}%, 
+      #444 ${bufferPercent}%, 
+      #444 100%
+    )`;
 }
 
 // خل كل الأصوات التالية تبدأ من الأول
