@@ -76,6 +76,18 @@ function loadAudio(links) {
     audioDiv.style.display = "flex";
 
     coverImg.src = `https://img.youtube.com/vi/${video_link.split("=")[1]}/maxresdefault.jpg`;
+
+    audios.forEach(audio => {
+        audio.addEventListener("play", () => {
+          isPlaying = true;
+          toPause();
+        });
+      
+        audio.addEventListener("pause", () => {
+            isPlaying = false;
+            toPlay();
+        });
+    });
 }
 
 
