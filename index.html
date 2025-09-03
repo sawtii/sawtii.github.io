@@ -272,7 +272,7 @@ progressBar.addEventListener('input', () => {
 });
 
 // خل كل الأصوات التالية تبدأ من الأول
-function makeNextZero() {
+function makeNextZero(progressInput = true) {
   let value = parseFloat(progressBar.value);
   for (let i = 0; i < audios.length; i++) {
     if(value < cumulativeDurations[i]){
@@ -280,9 +280,12 @@ function makeNextZero() {
       for(let j=i+1; j<audios.length; j++) {
         audios[j].currentTime = 0;
       }
-      switchTo(i, Math.max(0, value - prev));
-      if(isPlaying) {
-        playCurrent();
+
+      if(progressInput) {
+        switchTo(i, Math.max(0, value - prev));
+        if(isPlaying) {
+          playCurrent();
+        }
       }
       break;
     }
