@@ -194,16 +194,8 @@ function pauseAll() {
 }
 
 setInterval(() => {
-  // تقدم الوقت الحالي
-  let elapsed = 0;
-  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
-  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
-  formatTime(elapsed) != currentTimeEl.textContent ? currentTimeEl.textContent = formatTime(elapsed) : null;
-
-  // تقدم الشريط
-  let percent = (elapsed / totalDuration) * 100;
-  progressBar.value = elapsed;
-  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+  // الشريط والوقت الحالي
+  makeProgress();
 
   // وقف لو وصلت للآخر
   let lastIndex = audios.length - 1;
@@ -218,6 +210,7 @@ setInterval(() => {
 }, 100);
 
 document.addEventListener("keydown", (e) => {
+  console.log(currentAudioIndex);
   let audio = audios[currentAudioIndex]; // الصوت الحالي
   
   if (e.code === "Space") {
@@ -253,6 +246,9 @@ document.addEventListener("keydown", (e) => {
 
     // خل كل الأصوات التالية تبدأ من الأول
     makeNextZero();
+
+    // الشريط والوقت الحالي
+    makeProgress();
   }
 });
 
@@ -261,15 +257,22 @@ progressBar.addEventListener('input', () => {
   // خل كل الأصوات التالية تبدأ من الأول
   makeNextZero();
   
+  // الشريط والوقت الحالي
+  makeProgress();
+});
+
+function makeProgress() {
   // تقدم الوقت الحالي
   let elapsed = 0;
   for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
   if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
-  progressBar.value = elapsed;
-  
+  formatTime(elapsed) != currentTimeEl.textContent ? currentTimeEl.textContent = formatTime(elapsed) : null;
+
+  // تقدم الشريط
   let percent = (elapsed / totalDuration) * 100;
+  progressBar.value = elapsed;
   progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
-});
+}
 
 // خل كل الأصوات التالية تبدأ من الأول
 function makeNextZero(progressInput = true) {
