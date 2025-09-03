@@ -47,7 +47,17 @@ body {
     cursor: pointer;
 }
 
-.progress-bar::-webkit-slider-thumb, .progress-bar::-moz-range-thumb {
+.progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 14px;
+    border-radius: 500px;
+    background: #f9fffb;
+    cursor: pointer;
+    border: none;
+}
+
+.progress-bar::-moz-range-thumb {
     appearance: none;
     width: 24px;
     height: 14px;
@@ -97,5 +107,4 @@ body {
     height: auto;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-
 }
