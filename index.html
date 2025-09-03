@@ -196,7 +196,7 @@ function pauseAll() {
 setInterval(() => {
   // الشريط والوقت الحالي
   makeProgress();
-  console.log(currentAudioIndex);
+  // console.log(currentAudioIndex);
   // وقف لو وصلت للآخر
   let lastIndex = audios.length - 1;
   if (
@@ -210,7 +210,6 @@ setInterval(() => {
 }, 100);
 
 document.addEventListener("keydown", (e) => {
-  console.log(currentAudioIndex);
   let audio = audios[currentAudioIndex]; // الصوت الحالي
   
   if (e.code === "Space") {
