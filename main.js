@@ -83,7 +83,7 @@ audioDiv.style.display = "none";
 circleDiv.style.display = "flex";
 
 // ================== API Fetch ===================
-let api_link = "http://185.177.73.30:8000";
+let api_link = "https://youtube-to-mp3-api.duckdns.org";
 let tmpLoop = true;
 let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
 
