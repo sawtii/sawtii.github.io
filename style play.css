@@ -1,0 +1,100 @@
+.audio-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    min-height: 100vh;
+    background: #343434;
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+  
+/* شريط التقدم + الوقت */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    gap: 10px;
+}
+
+.current-time, .duration {
+    font-size: 0.9rem;
+    color: #ccc;
+    min-width: 45px;
+    text-align: center;
+}
+
+.progress-bar {
+    flex: 1;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #1DB954 0%, #1DB954 0%, #444 0%, #444 100%);
+    outline: none;
+    cursor: pointer;
+}
+
+.progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 14px;
+    border-radius: 500px;
+    background: #f9fffb;
+    cursor: pointer;
+    border: none;
+}
+
+.progress-bar::-moz-range-thumb {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1DB954;
+    cursor: pointer;
+    border: none;
+}
+  
+/* زر التشغيل */
+.play-button {
+    width: 100px;
+    height: 100px;
+    background: #1DB954;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.play-button svg {
+    width: 45px;
+    height: 45px;
+    fill: white;
+}
+
+.cover-image {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* المحاذاة أفقياً */
+    margin-top: 50px;       /* مسافة من أعلى الصفحة */
+}
+  
+.cover-image img {
+    width: 70%;
+    max-width: 700px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
