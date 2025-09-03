@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مشغل صوت موحد</title>
+<title>صَوتي</title>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -194,11 +194,18 @@ function pauseAll() {
 }
 
 setInterval(() => {
+  // تقدم الوقت الحالي
   let elapsed = 0;
   for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
   if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
   formatTime(elapsed) != currentTimeEl.textContent ? currentTimeEl.textContent = formatTime(elapsed) : null;
 
+  // تقدم الشريط
+  let percent = (elapsed / totalDuration) * 100;
+  progressBar.value = elapsed;
+  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+
+  // وقف لو وصلت للآخر
   let lastIndex = audios.length - 1;
   if (
     currentAudioIndex === lastIndex &&
@@ -226,7 +233,6 @@ document.addEventListener("keydown", (e) => {
         currentAudioIndex = 0;
         audio = audios[currentAudioIndex]; // الصوت الحالي
         audio.currentTime = 0;
-        // pauseAll();
       }
    
       audio.play();
@@ -245,33 +251,30 @@ document.addEventListener("keydown", (e) => {
     let value = Math.min(Math.max(0, parseFloat(progressBar.value) + step), totalDuration);
     progressBar.value = value;
 
-    for (let i = 0; i < audios.length; i++) {
-      if (value < cumulativeDurations[i]) {
-        let prev = i === 0 ? 0 : cumulativeDurations[i - 1];
-        for (let j = i + 1; j < audios.length; j++) {
-          audios[j].currentTime = 0;
-        }
-        switchTo(i, Math.max(0, value - prev));
-        if (isPlaying) {
-          playCurrent();
-        }
-        break;
-      }
-    }
+    // خل كل الأصوات التالية تبدأ من الأول
+    makeNextZero();
   }
-  let elapsed = 0;
-  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
-  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
-  progressBar.value = elapsed;
-
-  let percent = (elapsed / totalDuration) * 100;
-  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
 });
 
 // القفز عبر الشريط
 progressBar.addEventListener('input', () => {
+  // خل كل الأصوات التالية تبدأ من الأول
+  makeNextZero();
+  
+  // تقدم الوقت الحالي
+  let elapsed = 0;
+  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
+  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
+  progressBar.value = elapsed;
+  
+  let percent = (elapsed / totalDuration) * 100;
+  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
+});
+
+// خل كل الأصوات التالية تبدأ من الأول
+function makeNextZero() {
   let value = parseFloat(progressBar.value);
-  for(let i=0; i<audios.length; i++){
+  for (let i = 0; i < audios.length; i++) {
     if(value < cumulativeDurations[i]){
       let prev = i===0?0:cumulativeDurations[i-1];
       for(let j=i+1; j<audios.length; j++) {
@@ -284,15 +287,7 @@ progressBar.addEventListener('input', () => {
       break;
     }
   }
-
-  let elapsed = 0;
-  for(let i=0; i<currentAudioIndex; i++) elapsed += audios[i].duration || 0;
-  if(audios[currentAudioIndex]) elapsed += audios[currentAudioIndex].currentTime;
-  progressBar.value = elapsed;
-  
-  let percent = (elapsed / totalDuration) * 100;
-  progressBar.style.background = `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
-});
+}
 
 function switchTo(index, time) {
   pauseAll();
@@ -308,6 +303,7 @@ function toPause(){
   playIcon.style.display = "none";
   pauseIcon.style.display = "block";
 }
+
 function toPlay(){
   playIcon.style.display = "block";
   pauseIcon.style.display = "none";
