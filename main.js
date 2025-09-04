@@ -203,14 +203,8 @@ function makeProgress() {
     `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
 
     let bufferPercent = 0;
-
-    // نهاية آخر جزء متحمل
-    let bufferedEnd = audio.buffered.length 
-      ? audio.buffered.end(audio.buffered.length - 1) 
-      : 0;
-    
-    bufferPercent = (bufferedEnd / audioDuration) * 100;
-    
+    let bufferedEnd = bufferedAhead(audio);
+    bufferPercent = ((elapsed + bufferedEnd) / audioDuration) * 100;
     progressBar.style.background = `
       linear-gradient(to right, 
         #1DB954 0%, 
@@ -219,7 +213,22 @@ function makeProgress() {
         #696969 ${bufferPercent}%, 
         #444 ${bufferPercent}%, 
         #444 100%
-      )`;    
+      )`;
+}
+
+function bufferedAhead(audio) {
+    let current = audio.currentTime;
+  
+    for (let i = 0; i < audio.buffered.length; i++) {
+      let start = audio.buffered.start(i);
+      let end = audio.buffered.end(i);
+  
+      if (current >= start && current <= end) {
+        return end - current; // المسافة المحملة قدام currentTime
+      }
+    }
+  
+    return 0; // مش موجود في أي range محمل
 }
 
 function switchTo(time) {
