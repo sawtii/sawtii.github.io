@@ -50,7 +50,8 @@ circleDiv.style.display = "flex";
 
 // ================== API Fetch ===================
 let api_link = "https://youtube-to-mp3-api.duckdns.org";
-let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
+// let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
+let video_link = prompt("🎵 من فضلك أدخل الرابط:", "https://www.youtube.com/watch?v=");
 
 fetch(`${api_link}/url?link=${video_link}`)
     .then(response => response.json())
@@ -167,7 +168,7 @@ document.addEventListener("keydown", (e) => {
         progressBar.value = value;
 
         switchTo(Math.max(0, parseFloat(progressBar.value)));
-        
+
         // الشريط والوقت الحالي
         makeProgress();
     }
