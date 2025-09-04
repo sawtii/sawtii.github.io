@@ -79,13 +79,14 @@ circleDiv.style.display = "flex";
 let api_link = "https://youtube-to-mp3-api.duckdns.org";
 // let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
 let video_link = prompt("🎵 من فضلك أدخل الرابط:", "https://www.youtube.com/watch?v=");
-setYoutubeThumbnail(video_link.split("=")[1]);
 
 fetch(`${api_link}/url?link=${video_link}`)
     .then(response => response.json())
     .then(data => {
         console.log("✅ النتيجة:", data);
         if (data.download_id) {
+            setYoutubeThumbnail(video_link.split("=")[1]);
+            
             const downloadId = data.download_id;
 
             const checkStatus = () => {
@@ -276,5 +277,6 @@ function toPlay(){
     playIcon.style.display = "block";
     pauseIcon.style.display = "none";
 }
+
 
 
