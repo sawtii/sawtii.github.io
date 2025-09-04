@@ -24,6 +24,32 @@ function setProgress(percent) {
     document.getElementById('percent-label').textContent = percent.toFixed(1) + '%';
 }
 
+function setYoutubeThumbnail(videoId) {
+  const qualities = [
+    "maxresdefault.jpg",
+    "sddefault.jpg",
+    "hqdefault.jpg",
+    "mqdefault.jpg",
+    "default.jpg"
+  ];
+
+  (function tryQuality(i) {
+    if (i >= qualities.length) return;
+    const img = new Image();
+    img.onload = function () {
+      if (this.naturalWidth > 120) {
+        coverImg.src = this.src; // أول صورة شغالة
+      } else {
+        tryQuality(i + 1);
+      }
+    };
+    img.onerror = function () {
+      tryQuality(i + 1);
+    };
+    img.src = `https://img.youtube.com/vi/${videoId}/${qualities[i]}`;
+  })(0);
+}
+
 // الدالة لتحميل الصوت وعرضه
 function loadAudio(link) {
     source.src = link;
@@ -41,7 +67,8 @@ function loadAudio(link) {
     circleDiv.style.display = "none";
     audioDiv.style.display = "flex";
 
-    coverImg.src = `https://img.youtube.com/vi/${video_link.split("=")[1]}/maxresdefault.jpg`;
+    // coverImg.src = `https://img.youtube.com/vi/${video_link.split("=")[1]}/maxresdefault.jpg`;
+    setYoutubeThumbnail(video_link.split("=")[1]);
 }
 
 
@@ -248,3 +275,4 @@ function toPlay(){
     playIcon.style.display = "block";
     pauseIcon.style.display = "none";
 }
+
