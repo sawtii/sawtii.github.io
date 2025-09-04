@@ -203,8 +203,14 @@ function makeProgress() {
     `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #444 ${percent}%, #444 100%)`;
 
     let bufferPercent = 0;
-    let bufferedEnd = audio.buffered.length;
-    bufferPercent = ((elapsed + bufferedEnd) / audioDuration) * 100;
+
+    // نهاية آخر جزء متحمل
+    let bufferedEnd = audio.buffered.length 
+      ? audio.buffered.end(audio.buffered.length - 1) 
+      : 0;
+    
+    bufferPercent = (bufferedEnd / audioDuration) * 100;
+    
     progressBar.style.background = `
       linear-gradient(to right, 
         #1DB954 0%, 
@@ -213,7 +219,7 @@ function makeProgress() {
         #696969 ${bufferPercent}%, 
         #444 ${bufferPercent}%, 
         #444 100%
-      )`;
+      )`;    
 }
 
 function switchTo(time) {
