@@ -68,7 +68,7 @@ function loadAudio(link) {
     audioDiv.style.display = "flex";
 
     // coverImg.src = `https://img.youtube.com/vi/${video_link.split("=")[1]}/maxresdefault.jpg`;
-    setYoutubeThumbnail(video_link.split("=")[1]);
+    // setYoutubeThumbnail(video_link.split("=")[1]);
 }
 
 
@@ -79,6 +79,7 @@ circleDiv.style.display = "flex";
 let api_link = "https://youtube-to-mp3-api.duckdns.org";
 // let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
 let video_link = prompt("🎵 من فضلك أدخل الرابط:", "https://www.youtube.com/watch?v=");
+setYoutubeThumbnail(video_link.split("=")[1]);
 
 fetch(`${api_link}/url?link=${video_link}`)
     .then(response => response.json())
@@ -275,4 +276,5 @@ function toPlay(){
     playIcon.style.display = "block";
     pauseIcon.style.display = "none";
 }
+
 
