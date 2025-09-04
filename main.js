@@ -96,7 +96,6 @@ circleDiv.style.display = "flex";
 
 // ================== API Fetch ===================
 let api_link = "https://youtube-to-mp3-api.duckdns.org";
-let tmpLoop = true;
 let video_link = "https://www.youtube.com/watch?v=vZZDe_BHt8g";
 
 fetch(`${api_link}/url?link=${video_link}`)
@@ -121,21 +120,12 @@ fetch(`${api_link}/url?link=${video_link}`)
                     // ================= انتهاء التحميل =================
                     if (
                         statusData.status &&
-                        statusData.status.status === "done downloading" &&
-                        statusData.status.whole_file &&
-                        tmpLoop == true
-                    ) {
-                        let fileLinks = statusData.status.whole_file.map(f => `${api_link}/${f}`);
-                        loadAudio(fileLinks);
-                        tmpLoop = false; // بعد كده ما نحدثش التقدم تاني
-                        // مش هنرجع تاني هنا
-                    } else if (
-                        statusData.status &&
                         statusData.status.status === "done" &&
                         statusData.status.links &&
                         typeof statusData.status.links === "object"
                     ) {
-                        loadAudio(statusData.status.links);
+                        let fileLinks = statusData.status.whole_file.map(f => `${api_link}/${f}`);
+                        loadAudio(fileLinks);
                     } else if (statusData.status && statusData.status.status === "error") {
                         console.error("❌ حدث خطأ أثناء التحميل");
                     } else {
