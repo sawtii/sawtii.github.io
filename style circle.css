@@ -11,13 +11,23 @@ body, .circle-div {
     position: relative;
     width: 150px;
     height: 150px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    cursor: pointer;
 }
 
 .circle-background {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.3);
     position: absolute;
     top: 0;
     left: 0;
@@ -31,12 +41,16 @@ body, .circle-div {
 
 .progress-ring circle {
     fill: transparent;
-    stroke: #3498db;
+    stroke: #ffffff;
     stroke-width: 10;
     stroke-dasharray: 400;
     stroke-dashoffset: 400;
     stroke-linecap: round;
     transition: stroke-dashoffset 0.2s linear;
+
+    /* نضيف هنا الأنيميشن */
+    transform-origin: 50% 50%;
+    animation: rotate 2s linear infinite;
 }
 
 .rotating {
@@ -48,7 +62,8 @@ body, .circle-div {
     to { transform: rotate(360deg); }
 }
 
-  #percent-label {
+#percent-label {
+    /* color: #000; */
     font-size: 18px;
     font-weight: bold;
 }

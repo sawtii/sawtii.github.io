@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
 .audio-div {
     display: flex;
     flex-direction: column;
@@ -8,16 +10,17 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Tajawal', sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 40px;
     min-height: 100vh;
-    background: #343434;
+    background: #252525;
     color: #fff;
     padding: 0;
+    padding-bottom: 30px;
     margin: 0;
 }
   
@@ -75,7 +78,14 @@ body {
     cursor: pointer;
     border: none;
 }
-  
+
+/* العنوان */
+.audio-title {
+    text-align: right;
+    max-width: 70%;
+    font-size: 26px;
+}
+
 /* زر التشغيل */
 .play-button {
     width: 100px;
@@ -107,4 +117,11 @@ body {
     height: auto;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 700px) {
+    .audio-title {
+        max-width: 90%;
+        font-size: 17px;
+    }
 }
