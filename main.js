@@ -95,7 +95,6 @@ function loadAudio(link) {
 }
 
 showDiv("podcasts");
-// showDiv("circle");
 
 let is_cancel = false;
 circleContainer.onclick = () => {
@@ -104,7 +103,7 @@ circleContainer.onclick = () => {
 }
 
 // ================== API Fetch ===================
-function openAudio(video_link, video_title, video_thumbnail) {
+function openAudio(video_link, video_title) {
     showDiv("circle");
 
     audioTitle.textContent = video_title;
@@ -168,6 +167,7 @@ podcastsDiv.onclick = (eo) => {
         let thumbnail = item.dataset.thumbnail;
         let type = item.dataset.type;
         let condition = item.dataset.condition || "";
+        let reverse = item.dataset.reverse || "false";
         
         audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
         showDiv("audios");
@@ -181,10 +181,14 @@ podcastsDiv.onclick = (eo) => {
                     console.error('حدث خطأ:', data.error);
                     return;
                 }
+
+                if(reverse == "true") {
+                    data.reverse();
+                }
                 
                 console.log('عدد المقاطع في القناة:', data.length);
                 data.forEach((video, index) => {
-                    if (video.link && (condition == "" || video.title.includes(condition))) {
+                    if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
                         // const thumbUrl = video.thumb;
 
@@ -215,9 +219,13 @@ podcastsDiv.onclick = (eo) => {
                     return;
                 }
 
+                if(reverse == "true") {
+                    data.reverse();
+                }
+                
                 console.log('عدد المقاطع في القائمة:', data.length);
                 data.forEach((video, index) => {
-                    if (video.link && (condition == "" || video.title.includes(condition))) {
+                    if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
                         // const thumbUrl = video.thumb;
 
@@ -249,9 +257,8 @@ audiosDiv.onclick = (eo) => {
     if(item) {
         let link = item.dataset.link;
         let title = item.dataset.title;
-        let thumbnail = item.dataset.thumbnail;
 
-        openAudio(link, title, thumbnail);
+        openAudio(link, title);
     }
 }
 
