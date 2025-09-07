@@ -48,7 +48,7 @@ function setProgress(percent) {
     document.getElementById('percent-label').textContent = percent.toFixed(1) + '%';
 }
 
-function getYoutubeThumbnail(videoId) {
+function setYoutubeThumbnail(videoId) {
     const qualities = [
         "maxresdefault.jpg",
         "sddefault.jpg",
@@ -62,7 +62,7 @@ function getYoutubeThumbnail(videoId) {
         const img = new Image();
         img.onload = function () {
             if (this.naturalWidth > 120) {
-                return this.src; // أول صورة شغالة
+                coverImg.src = this.src; // أول صورة شغالة
             } else {
                 tryQuality(i + 1);
             }
@@ -101,9 +101,6 @@ let is_cancel = false;
 circleContainer.onclick = () => {
     showDiv("audios");
     is_cancel = true;
-    setTimeout(() => {
-        is_cancel = false;
-    }, 150);
 }
 
 // ================== API Fetch ===================
@@ -111,7 +108,7 @@ function openAudio(video_link, video_title, video_thumbnail) {
     showDiv("circle");
 
     audioTitle.textContent = video_title;
-    coverImg.src = video_thumbnail;
+    setYoutubeThumbnail(video_link.split("=")[1].split("&")[0]);
     
     fetch(`${api_link}/url?link=${video_link}`)
         .then(response => response.json())
@@ -124,8 +121,11 @@ function openAudio(video_link, video_title, video_thumbnail) {
                     fetch(`${api_link}/status/${downloadId}`)
                     .then(res => res.json())
                     .then(statusData => {
-                        if(is_cancel) return;
-                        
+                        if(is_cancel) {
+                            is_cancel = false;
+                            return;
+                        }
+
                         console.log("🔄 حالة التحميل:", statusData);
     
                         // ================= تحديث الدائرة فقط أثناء التنزيل =================
@@ -174,29 +174,29 @@ podcastsDiv.onclick = (eo) => {
 
         if(type == "channel") {
             console.log(item);
-            fetch(`${api_link}/channel?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=true`)
+            fetch(`${api_link}/channel?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     console.error('حدث خطأ:', data.error);
                     return;
                 }
-
+                
                 console.log('عدد المقاطع في القناة:', data.length);
                 data.forEach((video, index) => {
-                    if (video.link && (condition != "" && video.title.includes(condition))) {
+                    if (video.link && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
-                        const thumbUrl = video.thumb;
+                        // const thumbUrl = video.thumb;
 
                         // تكوين العنصر
                         const div = document.createElement("div");
                         div.className = "audio-item";
                         div.dataset.link = video.link;
                         div.dataset.title = video.title || "بدون عنوان";
-                        div.dataset.thumbnail = thumbUrl;
+                        // div.dataset.thumbnail = thumbUrl;
 
                         div.innerHTML = `
-                        <img src="${thumbUrl}" alt="Cover">
+                        <img src="${thumbnail}" alt="Cover">
                         <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
                         `;
 
@@ -207,7 +207,7 @@ podcastsDiv.onclick = (eo) => {
             })
             .catch(error => console.error('خطأ في الاتصال بـ API:', error));
         } else if(type == "playlist") {
-            fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=true`)
+            fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -219,17 +219,17 @@ podcastsDiv.onclick = (eo) => {
                 data.forEach((video, index) => {
                     if (video.link && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
-                        const thumbUrl = video.thumb;
+                        // const thumbUrl = video.thumb;
 
                         // تكوين العنصر
                         const div = document.createElement("div");
                         div.className = "audio-item";
                         div.dataset.link = video.link;
                         div.dataset.title = video.title || "بدون عنوان";
-                        div.dataset.thumbnail = thumbUrl;
+                        // div.dataset.thumbnail = thumbUrl;
 
                         div.innerHTML = `
-                        <img src="${thumbUrl}" alt="Cover">
+                        <img src="${thumbnail}" alt="Cover">
                         <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
                         `;
 

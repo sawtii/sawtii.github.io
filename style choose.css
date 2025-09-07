@@ -26,7 +26,7 @@
 }
 
 .audios-div .audio-item img, .podcasts-div .podcast-item img {
-    width: 120px;       /* عرض ثابت مناسب للثامبنيل */
+    width: 80px;       /* عرض ثابت مناسب للثامبنيل */
     height: auto;       /* يخلي الطول يتظبط تلقائي ويحافظ على النسبة */
     object-fit: cover;  /* لو الصورة أكبر، يظبطها جوا الإطار */
     border-radius: 10px;
