@@ -5,17 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صَوتي</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="stylesheet" href="./style choose.css">
     <link rel="stylesheet" href="./style circle.css">
     <link rel="stylesheet" href="./style play.css">
     <script defer src="./main.js"></script>
 </head>
 <body>
+    <div style="display: none;" class="podcasts-div">
+        <div class="podcast-item" data-type="channel" data-name="فاهم" data-link="https://www.youtube.com/@Fahem.Podcast/videos" data-thumbnail="https://yt3.googleusercontent.com/UGcuE6niVr5GTJ6W_bqKltzDd2WYI041p5bXufQSionkuquqpE1_w22ZmfMmhFvyjTBe1YKi9A=s160-c-k-c0x00ffffff-no-rj">
+            <img src="https://yt3.googleusercontent.com/UGcuE6niVr5GTJ6W_bqKltzDd2WYI041p5bXufQSionkuquqpE1_w22ZmfMmhFvyjTBe1YKi9A=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
+            <h1 dir="rtl">فاهم</h1>
+        </div>
+
+        <div class="podcast-item" data-type="channel" data-name="وعي" data-link="https://www.youtube.com/@Waie/videos" data-thumbnail="https://yt3.googleusercontent.com/CKqsDzH5ocpGeZ02mhxtIMkcl3nmoDE7DpEc7B1GV9Ep8rmWWUmQGfnsnSjXf0saruVwgp95P_c=s160-c-k-c0x00ffffff-no-rj">
+            <img src="https://yt3.googleusercontent.com/CKqsDzH5ocpGeZ02mhxtIMkcl3nmoDE7DpEc7B1GV9Ep8rmWWUmQGfnsnSjXf0saruVwgp95P_c=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
+            <h1 dir="rtl">وعي</h1>
+        </div>
+
+        <div class="podcast-item" data-type="channel" data-name="إيه المشكلة" data-condition="المشكلة في" data-link="https://www.youtube.com/@Eh_El_Moshkla/videos" data-thumbnail="https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj">
+            <img src="https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
+            <h1 dir="rtl">إيه المشكلة</h1>
+        </div>
+
+        <div class="podcast-item" data-type="playlist" data-name="عالمغرب الموسم 1" data-link="https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66" data-thumbnail="./صور مصغرة/عالمغرب.png">
+            <img src="./صور مصغرة/عالمغرب.png" alt="Cover">
+            <h1 dir="rtl">عالمغرب الموسم 1</h1>
+        </div>
+
+        <div class="podcast-item" data-type="playlist" data-name="عالمغرب الموسم 1" data-link="https://www.youtube.com/playlist?list=PLlXQj2VGUTmfOrpzgytlcIlu38pQWh4UJ" data-thumbnail="./صور مصغرة/عالمغرب.png">
+            <img src="./صور مصغرة/عالمغرب.png" alt="Cover">
+            <h1 dir="rtl">عالمغرب الموسم 2</h1>
+        </div>
+
+        <div class="podcast-item" data-type="playlist" data-name="حازم الصديق" data-link="https://www.youtube.com/playlist?list=PLcaLjDlQePQV9hRLiJJg_ccv_LbRT-K9h" data-thumbnail="https://i1.sndcdn.com/avatars-000615968262-b749e2-t1080x1080.jpg">
+            <img src="https://i1.sndcdn.com/avatars-000615968262-b749e2-t1080x1080.jpg" alt="Cover">
+            <h1 dir="rtl">حازم الصديق</h1>
+        </div>
+
+        <div class="podcast-item" data-type="playlist" data-name="إطناب" data-link="https://www.youtube.com/playlist?list=PLDN8vU_ZehsVHxPw4hA_TRnPwL47EUdon" data-thumbnail="./صوjpegصغرة/إطناب.png">
+            <img src="./صور مصغرة/إطناب.jpeg" alt="Cover">
+            <h1 dir="rtl">إطناب</h1>
+        </div>
+    </div>
+
+    <div style="display: none;" class="audios-div">
+    </div>
+
     <div style="display: none;" class="circle-div">
-        <div class="circle-container rotating">
+        <div class="circle-container">
             <div class="circle-background"></div>
             <svg class="progress-ring" width="150" height="150">
                 <circle r="65" cx="75" cy="75"></circle>
             </svg>
+
+            <img class="cancel-btn" src="./صور/إلغاء.png" alt="">
         </div>
         
         <div id="percent-label">0%</div>
@@ -26,6 +69,8 @@
         <div class="cover-image">
             <img src="" alt="Cover">
         </div>
+
+        <h1 dir="rtl" class="audio-title"></h1>
       
         <!-- شريط + الوقت -->
         <div class="controls">
