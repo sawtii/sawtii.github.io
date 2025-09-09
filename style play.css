@@ -61,23 +61,22 @@ body {
 }
 
 .progress-bar::-moz-range-thumb {
-    appearance: none;
+    background-color: #fff;
     width: 24px;
     height: 14px;
     border-radius: 500px;
-    background: #f9fffb;
     cursor: pointer;
     border: none;
 }
 
-.progress-bar::-moz-range-thumb {
+/*.progress-bar::-moz-range-thumb {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: #1DB954;
     cursor: pointer;
     border: none;
-}
+}*/
 
 /* العنوان */
 .audio-title {
@@ -124,4 +123,5 @@ body {
         max-width: 90%;
         font-size: 17px;
     }
+
 }
