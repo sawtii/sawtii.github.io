@@ -1,42 +1,51 @@
-.audios-div, .podcasts-div {
+.choose-div {
     display: flex;
     flex-direction: column;   /* العناصر تحت بعض */
     justify-content: flex-start;
     align-items: center;
-    gap: 20px;
     width: 100%;
-    max-width: 1000px;
-    height: 100vh;
-    padding: 10px 0;
+    padding-top: 85px;
+    padding-bottom: 80px;
+    overflow-x: hidden;
 }
 
-.audios-div .audio-item, .podcasts-div .podcast-item {
+.choose-div .choose-item {
     display: flex;                /* نخليها flex */
     flex-direction: row-reverse;  /* عشان الصورة تبقى على اليمين */
     align-items: center;          /* توسيط رأسي */
     justify-content: flex-start;
-    width: calc(100% - (10px * 2));
+    width: 100%;
+    max-width: 1000px;
     height: 100px;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
-    padding: 5px;
+    padding: 10px;
     box-sizing: border-box;
     gap: 15px; /* مسافة بين الصورة والنص */
     cursor: pointer;
+
+    position: relative;
+    right: -100%;
+    transition: all 0.3s;
 }
 
-.audios-div .audio-item img, .podcasts-div .podcast-item img {
+.choose-div .choose-item:hover {
+    background-color: var(--hover);
+}
+
+.choose-div .choose-item:active {
+    background-color: var(--active);
+}
+
+.choose-div .choose-item img {
     width: 80px;       /* عرض ثابت مناسب للثامبنيل */
     height: auto;       /* يخلي الطول يتظبط تلقائي ويحافظ على النسبة */
     object-fit: cover;  /* لو الصورة أكبر، يظبطها جوا الإطار */
     border-radius: 10px;
+    background-color: red;
 }
 
-.podcasts-div .podcast-item img {
-    width: 80px;
-}
-
-.audios-div .audio-item h1, .podcasts-div .podcast-item h1 {
+.choose-div .choose-item h1 {
     font-size: 1.2rem;
     color: #000000;
     margin: 0;
@@ -44,8 +53,28 @@
     text-align: right;
 }
 
+/* إظهار عند النزول */
+.choose-div .choose-item.show {
+    right: 0;
+}
+
+/* تخصيصات */
+.podcasts-div .podcast-item img {
+    width: 80px;
+}
+
+.people-div .people-item, .people-div .people-item img {
+    border-radius: 500px;
+}
+
+@media (max-width: 1000px) {
+    .choose-div .choose-item {
+        border-radius: 0;
+    }
+}
+
 @media (max-width: 700px) {
-    .audio-item h1, .podcast-item h1 {
+    .choose-div .choose-item h1 {
         font-size: 17px!important;
     }
 }

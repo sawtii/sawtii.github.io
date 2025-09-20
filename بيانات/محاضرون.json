@@ -1,0 +1,15 @@
+[
+    {
+        "name": "علاء حامد",
+        "photo": "mjkopvnkewjnw",
+        "courses": [
+            {
+                "name": "الداء والدواء",
+                "type": "playlist",
+                "reverse": false,
+                "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66",
+                "thumbnail": "ehweonjhfe"
+            }
+        ]
+    }
+]

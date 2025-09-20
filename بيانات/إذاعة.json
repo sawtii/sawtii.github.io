@@ -1,0 +1,48 @@
+[
+    {
+        "name": "فاهم",
+        "type": "channel",
+        "link": "https://www.youtube.com/@Fahem.Podcast/videos",
+        "thumbnail": "https://yt3.googleusercontent.com/UGcuE6niVr5GTJ6W_bqKltzDd2WYI041p5bXufQSionkuquqpE1_w22ZmfMmhFvyjTBe1YKi9A=s160-c-k-c0x00ffffff-no-rj"
+    },
+    {
+        "name": "وعي",
+        "type": "channel",
+        "link": "https://www.youtube.com/@Waie/videos",
+        "thumbnail": "https://yt3.googleusercontent.com/CKqsDzH5ocpGeZ02mhxtIMkcl3nmoDE7DpEc7B1GV9Ep8rmWWUmQGfnsnSjXf0saruVwgp95P_c=s160-c-k-c0x00ffffff-no-rj"
+    },
+    {
+        "name": "إيه المشكلة",
+        "type": "channel",
+        "condition": "المشكلة في",
+        "link": "https://www.youtube.com/@Eh_El_Moshkla/videos",
+        "thumbnail": "https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj"
+    },
+    {
+        "name": "المصطبة",
+        "type": "playlist",
+        "link": "https://www.youtube.com/playlist?list=PL5isa5XjlZ5pH8vT0TJO9qZrRiZcrWuDp",
+        "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_nwE4n9vyXfAvno2VZ8TXieaSUQZJhlKpbp8IzWc0RX_50=s160-c-k-c0x00ffffff-no-rj"
+    },
+    {
+        "name": "حازم الصديق",
+        "type": "playlist",
+        "reverse": true,
+        "link": "https://www.youtube.com/playlist?list=PLcaLjDlQePQV9hRLiJJg_ccv_LbRT-K9h",
+        "thumbnail": "https://i1.sndcdn.com/avatars-000615968262-b749e2-t1080x1080.jpg"
+    },
+    {
+        "name": "أحمد شاهين",
+        "type": "playlist",
+        "reverse": true,
+        "link": "https://www.youtube.com/playlist?list=PLHWFdqV6LNLyop_1Z2bU1HsQJS-et1iyZ",
+        "thumbnail": "./صور مصغرة/أحمد شاهين.jpg"
+    },
+    {
+        "name": "إطناب",
+        "type": "playlist",
+        "reverse": true,
+        "link": "https://www.youtube.com/playlist?list=PLDN8vU_ZehsVHxPw4hA_TRnPwL47EUdon",
+        "thumbnail": "./صور مصغرة/إطناب.jpeg"
+    }
+]

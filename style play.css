@@ -1,27 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-
 .audio-div {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
+    padding-top: 60px;
+    /* padding-bottom: 20px; */
     width: 100%;
-}
-
-body {
-    font-family: 'Tajawal', sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    min-height: 100vh;
-    background: #252525;
-    color: #fff;
-    padding: 0;
-    padding-bottom: 30px;
-    margin: 0;
+    color: #000;
 }
   
 /* شريط التقدم + الوقت */
@@ -29,13 +15,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80%;
+    width: 90%;
+    max-width: 900px;
     gap: 10px;
 }
 
 .current-time, .duration {
     font-size: 0.9rem;
-    color: #ccc;
+    color: #000;
     min-width: 45px;
     text-align: center;
 }
@@ -45,7 +32,7 @@ body {
     appearance: none;
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(to right, #1DB954 0%, #1DB954 0%, #444 0%, #444 100%);
+    background: linear-gradient(to right, #1DB954 0%, #1DB954 0%, #999 0%, #999 100%);
     outline: none;
     cursor: pointer;
 }
@@ -56,33 +43,26 @@ body {
     height: 14px;
     border-radius: 500px;
     background: #f9fffb;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     border: none;
 }
 
 .progress-bar::-moz-range-thumb {
-    background-color: #fff;
     width: 24px;
     height: 14px;
     border-radius: 500px;
+    background: #f9fffb;
     cursor: pointer;
     border: none;
 }
-
-/*.progress-bar::-moz-range-thumb {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #1DB954;
-    cursor: pointer;
-    border: none;
-}*/
 
 /* العنوان */
 .audio-title {
     text-align: right;
     max-width: 70%;
     font-size: 26px;
+    direction: rtl;
 }
 
 /* زر التشغيل */
@@ -111,8 +91,8 @@ body {
 }
   
 .cover-image img {
-    width: 70%;
-    max-width: 700px;
+    width: 80%;
+    max-width: 480px;
     height: auto;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
@@ -123,5 +103,4 @@ body {
         max-width: 90%;
         font-size: 17px;
     }
-
 }

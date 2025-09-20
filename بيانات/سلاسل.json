@@ -1,0 +1,33 @@
+[
+    {
+        "name": "إيه المشكلة",
+        "photo": "https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj",
+        "courses": [
+            {
+                "name": "عالمغرب الموسم 1",
+                "type": "playlist",
+                "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66",
+                "thumbnail": "./صور مصغرة/عالمغرب.png"
+            },
+            {
+                "name": "عالمغرب الموسم 2",
+                "type": "playlist",
+                "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmfOrpzgytlcIlu38pQWh4UJ",
+                "thumbnail": "./صور مصغرة/عالمغرب.png"
+            }
+        ]
+    },
+    {
+        "name": "شريف علي",
+        "photo": "mjkopvnkewjnw",
+        "courses": [
+            {
+                "name": "مكارم",
+                "type": "playlist",
+                "reverse": false,
+                "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66",
+                "thumbnail": "ehweonjhfe"
+            }
+        ]
+    }
+]

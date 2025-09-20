@@ -7,6 +7,14 @@ body, .circle-div {
     width: 100%;
 }
 
+.circle-div {
+    position: relative;
+    top: var(--home-height);
+    width: calc(100% - 60px);
+    height: calc(96vh - 70px);
+    padding: 0 30px;
+}
+
 .circle-container {
     position: relative;
     width: 150px;
@@ -41,7 +49,7 @@ body, .circle-div {
 
 .progress-ring circle {
     fill: transparent;
-    stroke: #ffffff;
+    stroke: #fff;
     stroke-width: 10;
     stroke-dasharray: 400;
     stroke-dashoffset: 400;
@@ -63,7 +71,12 @@ body, .circle-div {
 }
 
 #percent-label {
-    /* color: #000; */
+    color: #000;
     font-size: 18px;
     font-weight: bold;
+}
+
+#circle-audio-title {
+    color: #000;
+    direction: rtl;
 }

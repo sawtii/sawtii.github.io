@@ -5,62 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صَوتي</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <link rel="stylesheet" href="./style consts.css">
     <link rel="stylesheet" href="./style choose.css">
     <link rel="stylesheet" href="./style circle.css">
     <link rel="stylesheet" href="./style play.css">
+
     <script defer src="./main.js"></script>
 </head>
 <body>
-    <div style="display: none;" class="podcasts-div">
-        <div class="podcast-item" data-type="channel" data-name="فاهم" data-link="https://www.youtube.com/@Fahem.Podcast/videos" data-thumbnail="https://yt3.googleusercontent.com/UGcuE6niVr5GTJ6W_bqKltzDd2WYI041p5bXufQSionkuquqpE1_w22ZmfMmhFvyjTBe1YKi9A=s160-c-k-c0x00ffffff-no-rj">
-            <img src="https://yt3.googleusercontent.com/UGcuE6niVr5GTJ6W_bqKltzDd2WYI041p5bXufQSionkuquqpE1_w22ZmfMmhFvyjTBe1YKi9A=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
-            <h1 dir="rtl">فاهم</h1>
-        </div>
+    <!-- إذاعة -->
+    <div style="display: none;" class="choose-div podcasts-div"></div>
 
-        <div class="podcast-item" data-type="channel" data-name="وعي" data-link="https://www.youtube.com/@Waie/videos" data-thumbnail="https://yt3.googleusercontent.com/CKqsDzH5ocpGeZ02mhxtIMkcl3nmoDE7DpEc7B1GV9Ep8rmWWUmQGfnsnSjXf0saruVwgp95P_c=s160-c-k-c0x00ffffff-no-rj">
-            <img src="https://yt3.googleusercontent.com/CKqsDzH5ocpGeZ02mhxtIMkcl3nmoDE7DpEc7B1GV9Ep8rmWWUmQGfnsnSjXf0saruVwgp95P_c=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
-            <h1 dir="rtl">وعي</h1>
-        </div>
+    <!-- محاضرات + سلاسل -->
+    <div style="display: none;" class="choose-div people-div" data-type="courses|salasel"></div> <!-- المحاضرون -->
 
-        <div class="podcast-item" data-type="channel" data-name="إيه المشكلة" data-condition="المشكلة في" data-link="https://www.youtube.com/@Eh_El_Moshkla/videos" data-thumbnail="https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj">
-            <img src="https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
-            <h1 dir="rtl">إيه المشكلة</h1>
-        </div>
+    <div style="display: none;" class="choose-div courses-div" data-type="courses|salasel"></div> <!-- الدورات -->
 
-        <div class="podcast-item" data-type="playlist" data-name="عالمغرب الموسم 1" data-link="https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66" data-thumbnail="./صور مصغرة/عالمغرب.png">
-            <img src="./صور مصغرة/عالمغرب.png" alt="Cover">
-            <h1 dir="rtl">عالمغرب الموسم 1</h1>
-        </div>
+    <div style="display: none;" class="choose-div audios-div"></div> <!-- دروس الدورة -->
 
-        <div class="podcast-item" data-type="playlist" data-name="عالمغرب الموسم 1" data-link="https://www.youtube.com/playlist?list=PLlXQj2VGUTmfOrpzgytlcIlu38pQWh4UJ" data-thumbnail="./صور مصغرة/عالمغرب.png">
-            <img src="./صور مصغرة/عالمغرب.png" alt="Cover">
-            <h1 dir="rtl">عالمغرب الموسم 2</h1>
-        </div>
-
-        <div class="podcast-item" data-type="playlist" data-name="المصطبة" data-link="https://www.youtube.com/playlist?list=PL5isa5XjlZ5pH8vT0TJO9qZrRiZcrWuDp" data-thumbnail="https://yt3.googleusercontent.com/ytc/AIdro_nwE4n9vyXfAvno2VZ8TXieaSUQZJhlKpbp8IzWc0RX_50=s160-c-k-c0x00ffffff-no-rj">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_nwE4n9vyXfAvno2VZ8TXieaSUQZJhlKpbp8IzWc0RX_50=s160-c-k-c0x00ffffff-no-rj" alt="Cover">
-            <h1 dir="rtl">المصطبة</h1>
-        </div>
-
-        <div class="podcast-item" data-type="playlist" data-name="حازم الصديق" data-reverse="true" data-link="https://www.youtube.com/playlist?list=PLcaLjDlQePQV9hRLiJJg_ccv_LbRT-K9h" data-thumbnail="https://i1.sndcdn.com/avatars-000615968262-b749e2-t1080x1080.jpg">
-            <img src="https://i1.sndcdn.com/avatars-000615968262-b749e2-t1080x1080.jpg" alt="Cover">
-            <h1 dir="rtl">حازم الصديق</h1>
-        </div>
-
-        <div class="podcast-item" data-type="playlist" data-name="أحمد شاهين" data-reverse="true" data-link="https://www.youtube.com/playlist?list=PLHWFdqV6LNLyop_1Z2bU1HsQJS-et1iyZ" data-thumbnail="./صور مصغرة/أحمد شاهين.jpg">
-            <img src="./صور مصغرة/أحمد شاهين.jpg" alt="Cover">
-            <h1 dir="rtl">أحمد شاهين</h1>
-        </div>
-
-        <div class="podcast-item" data-type="playlist" data-name="إطناب" data-reverse="true" data-link="https://www.youtube.com/playlist?list=PLDN8vU_ZehsVHxPw4hA_TRnPwL47EUdon" data-thumbnail="./صور مصغرة/إطناب.jpeg">
-            <img src="./صور مصغرة/إطناب.jpeg" alt="Cover">
-            <h1 dir="rtl">إطناب</h1>
-        </div>
-    </div>
-
-    <div style="display: none;" class="audios-div">
-    </div>
-
+    <!-- دائرة التنزيل -->
     <div style="display: none;" class="circle-div">
         <div class="circle-container">
             <div class="circle-background"></div>
@@ -72,9 +36,10 @@
         </div>
         
         <div id="percent-label">0%</div>
-        <div id="audio-container"></div>
+        <div id="circle-audio-title"></div>
     </div>
 
+    <!-- الصوت نفسه -->
     <div style="display: none;" class="audio-div">
         <div class="cover-image">
             <img src="" alt="Cover">
@@ -105,9 +70,32 @@
         </div>
 
         <!-- الصوت -->
-        <audio class="the-audio" preload="metadata" controls>
+        <audio class="the-audio" preload="metadata">
             <source type="audio/mpeg" src="">
         </audio>
+    </div>
+
+    <!-- الرئيسية -->
+    <div class="home">
+        <div class="back"></div>
+        <div class="logo"></div>
+    </div>
+
+    <div class="footer">
+        <div class="item courses">
+            <img src="" alt="">
+            <p>محاضرات<br>ودروس</p>
+        </div>
+
+        <div class="item salasel">
+            <img src="" alt="">
+            <p>سلاسل</p>
+        </div>
+        
+        <div class="item podcasts">
+            <img src="" alt="">
+            <p>إذاعة</p>
+        </div>
     </div>
 </body>
 </html>
