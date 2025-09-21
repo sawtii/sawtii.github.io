@@ -498,7 +498,7 @@ function openAudio(video_link, video_title) {
 }
 
 peopleDiv.onclick = (eo) => {
-    back.style.display = "block";
+    back.style.display = "flex";
     
     let item = eo.target.closest(".choose-item");
     if(item) {
@@ -523,7 +523,7 @@ peopleDiv.onclick = (eo) => {
     }
 }
 
-podcastsDiv.onclick = (eo) => {back.style.display = "block"; show_audios(eo);}
+podcastsDiv.onclick = (eo) => {back.style.display = "flex"; show_audios(eo);}
 coursesDiv.onclick = (eo) => {show_audios(eo);}
 
 audiosDiv.onclick = (eo) => {

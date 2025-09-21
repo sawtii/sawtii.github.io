@@ -39,11 +39,11 @@
 }
 
 .choose-div .choose-item img {
-    width: 80px;       /* عرض ثابت مناسب للثامبنيل */
-    height: auto;       /* يخلي الطول يتظبط تلقائي ويحافظ على النسبة */
+    width: 80px;
+    height: auto;
     object-fit: cover;  /* لو الصورة أكبر، يظبطها جوا الإطار */
     border-radius: 10px;
-    background-color: red;
+    /* background-color: red; */
 }
 
 .choose-div .choose-item h1 {
@@ -66,6 +66,12 @@
 
 .people-div .people-item, .people-div .people-item img {
     border-radius: 500px;
+}
+
+.courses-div .choose-item img {
+    height: 80px;
+    width: auto;
+    /* width: 142.21px; */
 }
 
 @media (max-width: 1000px) {

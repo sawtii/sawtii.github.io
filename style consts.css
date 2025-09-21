@@ -39,11 +39,14 @@ body {
 
 .back {
     position: absolute;
-    left: 30px;
-    width: 40px;
-    height: 40px;
+    left: 2%;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background-color: red;
+    font-size: 40px;
+    color: #292929;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 }
 
@@ -109,10 +112,8 @@ body {
     color: #387dd1;
 } */
 
-.footer .item img {
-    width: 35px;
-    height: 35px;
-    background-color: red;
+.footer .item i {
+    font-size: 25px;
 }
 
 .footer .item p {
@@ -123,4 +124,27 @@ body {
     font-weight: bold;
     line-height: 12px;
     margin: auto;
+}
+
+/* أيقونات */
+.fa-broadcast-tower:before, .fa-tower-broadcast:before {
+    content: "\f519";
+}
+
+@keyframes fadePulse {
+    0%   { opacity: 1; transform: scale(1); }
+    50%  { opacity: 0.35; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.my-fade {
+    display: inline-block;
+    animation: fadePulse 1.6s infinite;
+    transform-origin: center;
+}
+
+@media (max-width: 500px) {
+    i {
+        font-size: 30px;
+    }
 }

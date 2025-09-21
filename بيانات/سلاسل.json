@@ -19,14 +19,14 @@
     },
     {
         "name": "شريف علي",
-        "photo": "mjkopvnkewjnw",
+        "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6wKfwX2vht7LHjoHk5prNDWNDt-H3nYTwQ&usqp=CAU",
         "courses": [
             {
                 "name": "مكارم",
                 "type": "playlist",
                 "reverse": false,
                 "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66",
-                "thumbnail": "ehweonjhfe"
+                "thumbnail": "https://i.ytimg.com/vi/COogWP0kKCc/hqdefault.jpg"
             }
         ]
     }
