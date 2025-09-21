@@ -53,6 +53,7 @@
     height: 14px;
     border-radius: 500px;
     background: #f9fffb;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     border: none;
 }
