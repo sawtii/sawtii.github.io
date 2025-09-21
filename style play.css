@@ -66,11 +66,62 @@
     direction: rtl;
 }
 
+/* السرعات */
+.speeds {
+    margin-top: 50px;
+    width: 70%;
+    max-width: 370px;
+    height: 50px;
+    background: linear-gradient(-30deg, #7afa7a, #8ae0ff);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 3px;
+    padding: 3px;
+    direction: rtl;
+}
+
+.speeds div {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    background-color: #fff;
+    height: 100%;
+    cursor: pointer;
+}
+
+.speeds div:first-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.speeds div:last-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.speeds div:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.speeds div:active {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.speeds div.active {
+    background-color: transparent;
+}
+
 /* زر التشغيل */
 .play-button {
     width: 100px;
     height: 100px;
     background: #1DB954;
+    background: linear-gradient(-30deg, #7afa7a, #8ae0ff);
     border-radius: 50%;
     display: flex;
     justify-content: center;

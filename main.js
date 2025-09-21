@@ -6,6 +6,8 @@ const coursesDiv = document.querySelector(".courses-div");
 const audiosDiv = document.querySelector(".audios-div");
 const circleDiv = document.querySelector(".circle-div");
 const audioDiv = document.querySelector(".audio-div");
+const speedsDiv = audioDiv.querySelector(".speeds");
+const speeds = speedsDiv.querySelectorAll("div");
 
 // دوال عامة
 function search_by_key(arrOfObj, key, value) {
@@ -328,6 +330,7 @@ const after_download_files = setInterval(() => {
         clearInterval(after_download_files);
     }
 });
+// showDiv("audio")
 
 back.style.display = "none";
 footer.querySelectorAll(".item").forEach(item => {
@@ -425,6 +428,7 @@ function loadAudio(link) {
         play();
     });
 
+    active_speed(speedsDiv.querySelector(".active"));
     showDiv("audio");
 }
 
@@ -727,4 +731,26 @@ function scrolling() {
 function refresh_scrolling(elements) {
     elements.forEach(element => {element.classList.remove("show")});
     call_show_recusive(0, elements);
+}
+
+// السرعات
+active_speed(speeds[0]);
+
+function del_active_speed() {
+    speeds.forEach(element => {
+        element.classList.remove("active");
+    });
+}
+
+function active_speed(element) {
+    del_active_speed();
+    element.classList.add("active");
+    audio.playbackRate = parseFloat(element.textContent);
+}
+
+speedsDiv.onclick = (eo) => {
+    if(eo.target != speedsDiv) {
+        console.log(eo.target);
+        active_speed(eo.target);
+    }
 }
