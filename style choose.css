@@ -71,6 +71,7 @@
 .courses-div .choose-item img {
     height: 80px;
     width: auto;
+    min-width: 80px;
     /* width: 142.21px; */
 }
 

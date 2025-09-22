@@ -67,18 +67,22 @@
         </div>
 
         <!-- زر التشغيل -->
-        <div class="play-button" id="playBtn">
-            <svg viewBox="0 0 60 60" id="icon">
-            <!-- أيقونة تشغيل -->
-            <g id="playIcon">
-                <polygon points="22,15 22,45 45,30" fill="white" stroke="white" stroke-linejoin="round" stroke-width="2"/>
-            </g>
-            <!-- أيقونة إيقاف -->
-            <g id="pauseIcon" style="display:none;">
-                <rect x="18" y="15" width="10" height="30" rx="4" fill="white"/>
-                <rect x="32" y="15" width="10" height="30" rx="4" fill="white"/>
-            </g>
-            </svg>
+        <div class="play-container">
+            <div class="before-ten">-10</div>
+            <div class="play-button" id="playBtn">
+                <svg viewBox="0 0 60 60" id="icon">
+                <!-- أيقونة تشغيل -->
+                <g id="playIcon">
+                    <polygon points="22,15 22,45 45,30" fill="white" stroke="white" stroke-linejoin="round" stroke-width="2"/>
+                </g>
+                <!-- أيقونة إيقاف -->
+                <g id="pauseIcon" style="display:none;">
+                    <rect x="18" y="15" width="10" height="30" rx="4" fill="white"/>
+                    <rect x="32" y="15" width="10" height="30" rx="4" fill="white"/>
+                </g>
+                </svg>
+            </div>
+            <div class="after-ten">+10</div>
         </div>
 
         <!-- الصوت -->

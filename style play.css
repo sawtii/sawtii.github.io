@@ -68,7 +68,7 @@
 
 /* السرعات */
 .speeds {
-    margin-top: 50px;
+    margin-top: 3px;
     width: 70%;
     max-width: 370px;
     height: 50px;
@@ -114,12 +114,44 @@
 
 .speeds div.active {
     background-color: transparent;
+    color: #fff;
+}
+
+/* حاوي التشغيل */
+.play-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+    padding: 0;
+}
+
+.play-container * {
+    flex-shrink: 0;
+}
+
+/* التقديم والتأخير */
+.after-ten, .before-ten {
+    border-radius: 500px;
+    background-color: #8ae0ff;
+    border: 3px solid #74beda;
+    /* background: linear-gradient(-30deg, #7afa7a, #8ae0ff); */
+    width: calc(var(--play-button) * 0.6);
+    height: calc(var(--play-button) * 0.6);
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 25px;
 }
 
 /* زر التشغيل */
 .play-button {
-    width: 100px;
-    height: 100px;
+    width: var(--play-button);
+    height: var(--play-button);
     background: #1DB954;
     background: linear-gradient(-30deg, #7afa7a, #8ae0ff);
     border-radius: 50%;
@@ -154,5 +186,17 @@
     .audio-title {
         max-width: 90%;
         font-size: 17px;
+    }
+}
+
+@media (max-width: 500px) {
+    .speeds {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 400px) {
+    .speeds {
+        margin-top: 105px;
     }
 }
