@@ -86,3 +86,9 @@
         font-size: 17px!important;
     }
 }
+
+@media (max-width: 500px) {
+    .choose-div .choose-item h1 {
+        font-size: 17px!important;
+    }
+}

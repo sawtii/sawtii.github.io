@@ -278,6 +278,7 @@ function show_audios(eo) {
             .then(response => response.json())
             .then(data => {
                 audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
+                
                 if (data.error) {
                     console.error('حدث خطأ:', data.error);
                     return;
