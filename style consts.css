@@ -22,6 +22,10 @@ body {
     user-select: none;
 }
 
+.audio-title {
+    user-select: auto;
+}
+
 /* الرئيسية */
 .home {
     position: fixed;
