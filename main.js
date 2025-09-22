@@ -7,8 +7,6 @@ const coursesDiv = document.querySelector(".courses-div");
 const audiosDiv = document.querySelector(".audios-div");
 const circleDiv = document.querySelector(".circle-div");
 const audioDiv = document.querySelector(".audio-div");
-const speedsDiv = audioDiv.querySelector(".speeds");
-const speeds = speedsDiv.querySelectorAll("div");
 
 // =================== الرئيسة ====================
 const homeBar = document.querySelector(".home");
@@ -22,25 +20,33 @@ const footer_courses = footer.querySelector(".item.courses");
 let active_page = "";
 
 // ==================== الصوت ===================
-const playButton = audioDiv.querySelector('#playBtn');
-const progressBar = audioDiv.querySelector('.progress-bar');
-const currentTimeEl = audioDiv.querySelector('.current-time');
-const durationEl = audioDiv.querySelector('.duration');
-const playIcon = audioDiv.querySelector('#playIcon');
-const pauseIcon = audioDiv.querySelector('#pauseIcon');
 const coverImg = audioDiv.querySelector(".cover-image img");
-const audio = audioDiv.querySelector(".the-audio");
 const audioTitle = audioDiv.querySelector(".audio-title");
+const audio = audioDiv.querySelector(".the-audio");
 const source = audio.querySelector("source");
+const playButton = audioDiv.querySelector("#playBtn");
+const progressBar = audioDiv.querySelector(".progress-bar");
+const currentTimeEl = audioDiv.querySelector(".current-time");
+const durationEl = audioDiv.querySelector(".duration");
+const playIcon = audioDiv.querySelector("#playIcon");
+const pauseIcon = audioDiv.querySelector("#pauseIcon");
+const speedsDiv = audioDiv.querySelector(".speeds");
+const speeds = speedsDiv.querySelectorAll("div");
 
 // ============== دائرة التنزيل ================
-const circleContainer = document.querySelector('.circle-container');
-const circle = circleContainer.querySelector('circle');
-const cancel = circleContainer.querySelector('.cancel-btn');
+const circleContainer = document.querySelector(".circle-container");
+const circle = circleContainer.querySelector("circle");
+const cancel = circleContainer.querySelector(".cancel-btn");
 const circle_audioTitle = circleDiv.querySelector("#circle-audio-title");
 const radius = circle.r.baseVal.value;
 const circumference = 2 * Math.PI * radius;
 circle.style.strokeDasharray = circumference;
+
+// ============== أزرار التنزيل ================
+const downloadContainer = document.querySelector(".download-container");
+const downloadButton = downloadContainer.querySelector(".download-btn");
+const download_progressBar = downloadContainer.querySelector(".progress-bar");
+const download_progressText = downloadContainer.querySelector(".progress-text");
 
 // دوال عامة
 function search_by_key(arrOfObj, key, value) {
@@ -108,8 +114,7 @@ function load_files_data() {
 load_files_data();
 
 // ============================================== دوال الرئيسية =============================================================
-// الرجوع
-function back_click() {
+function back_click() { // الرجوع
     if(active_page.includes("inner") || active_page == "podcasts audios") {
         active_footer_item(footer_index(footer.querySelector(`.item.${audioDiv.dataset.type}`)));
         back.style.display = "none";
@@ -280,7 +285,7 @@ function show_audios(eo) {
                 audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
                 
                 if (data.error) {
-                    console.error('حدث خطأ:', data.error);
+                    console.error("حدث خطأ:", data.error);
                     return;
                 }
 
@@ -288,7 +293,7 @@ function show_audios(eo) {
                     data.reverse();
                 }
                 
-                console.log('عدد المقاطع في القناة:', data.length);
+                console.log("عدد المقاطع في القناة:", data.length);
                 data.forEach((video, index) => {
                     if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
@@ -314,7 +319,7 @@ function show_audios(eo) {
 
                 scrolling();
             })
-            .catch(error => console.error('خطأ في الاتصال بـ API:', error));
+            .catch(error => console.error("خطأ في الاتصال بـ API:", error));
         } else if(type == "playlist") {
             fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
             .then(response => response.json())
@@ -322,7 +327,7 @@ function show_audios(eo) {
                 audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
 
                 if (data.error) {
-                    console.error('حدث خطأ:', data.error);
+                    console.error("حدث خطأ:", data.error);
                     return;
                 }
 
@@ -330,7 +335,7 @@ function show_audios(eo) {
                     data.reverse();
                 }
                 
-                console.log('عدد المقاطع في القائمة:', data.length);
+                console.log("عدد المقاطع في القائمة:", data.length);
                 data.forEach((video, index) => {
                     if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                         // استخراج videoId من الرابط
@@ -356,15 +361,14 @@ function show_audios(eo) {
 
                 scrolling();
             })
-            .catch(error => console.error('خطأ في الاتصال بـ API:', error));
+            .catch(error => console.error("خطأ في الاتصال بـ API:", error));
             
         }
     }
 }
 
 // ========================================= دوال تنزيل وعرض الصوت =====================================================
-// تحميل الدائرة
-function setProgress(percent) {
+function setProgress(percent) { // تحميل الدائرة
     const minPercent = 1; // أقل نسبة عشان التحميل يبان
     let displayPercent = percent;
 
@@ -375,7 +379,7 @@ function setProgress(percent) {
     const offset = circumference - (displayPercent / 100) * circumference;
     circle.style.strokeDashoffset = offset;
 
-    document.getElementById('percent-label').textContent = percent.toFixed(1) + '%';
+    document.getElementById("percent-label").textContent = percent.toFixed(1) + "%";
 }
 
 // وضع الصورة المصغرة
@@ -428,66 +432,76 @@ function loadAudio(link) {
 
 // تنزيل المحاضرة وعرضها -- الأصل
 function openAudio(video_link, video_title) {
-    circle_audioTitle.innerText = video_title;
-    showDiv("circle");
-    setProgress(0);
-
     audioTitle.textContent = video_title;
     setYoutubeThumbnail(video_link.split("=")[1].split("&")[0]);
     
-    fetch(`${api_link}/url?link=${video_link}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("✅ النتيجة:", data);
-
-            if (
-                data.status &&
-                data.status.status === "done"
-            ) {
-                let fileLinks = data.status.whole_file.map(f => `${api_link}/${f}`);
-                loadAudio(fileLinks[0]);
-            } else if (data.download_id) {       
-                const downloadId = data.download_id;
+    let file_name = video_link.split("/").pop().split("=").pop() + ".m4a";
+    isAudioSaved(file_name).then(exists => {
+        if (exists) {
+            // موجود بالفعل
+            console.log("الصوت موجود بالفعل، تشغيل من IndexedDB");
+            loadAndPlay(file_name);
+            return;
+        } else {
+            circle_audioTitle.innerText = video_title;
+            showDiv("circle");
+            setProgress(0);
+            fetch(`${api_link}/url?link=${video_link}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("✅ النتيجة:", data);
     
-                const checkStatus = () => {
-                    fetch(`${api_link}/status/${downloadId}`)
-                    .then(res => res.json())
-                    .then(statusData => {
-                        if(is_cancel) {
-                            is_cancel = false;
-                            return;
-                        }
-
-                        console.log("🔄 حالة التحميل:", statusData);
+                    if (
+                        data.status &&
+                        data.status.status === "done"
+                    ) {
+                        let fileLinks = data.status.whole_file.map(f => `${api_link}/${f}`);
+                        downloadContainer.style.display = "flex";
+                        loadAudio(fileLinks[0]);
+                    } else if (data.download_id) {       
+                        const downloadId = data.download_id;
+            
+                        const checkStatus = () => {
+                            fetch(`${api_link}/status/${downloadId}`)
+                            .then(res => res.json())
+                            .then(statusData => {
+                                if(is_cancel) {
+                                    is_cancel = false;
+                                    return;
+                                }
     
-                        // ================= تحديث الدائرة فقط أثناء التنزيل =================
-                        if (statusData.status && typeof statusData.status.progress === 'number' && statusData.status.status !== "done downloading") {
-                            setProgress(Math.min(statusData.status.progress, 100));
-                        }
-    
-                        // ================= انتهاء التحميل =================
-                        if (
-                            statusData.status &&
-                            statusData.status.status === "done"
-                        ) {
-                            let fileLinks = statusData.status.whole_file.map(f => `${api_link}/${f}`);
-                            loadAudio(fileLinks[0]);
-                        } else if (statusData.status && statusData.status.status === "error") {
-                            console.error("❌ حدث خطأ أثناء التحميل");
-                        } else {
-                            setTimeout(checkStatus, 100);
-                        }
-                    })
-                    .catch(err => {
-                        console.error("❌ خطأ في جلب الحالة:", err);
-                        setTimeout(checkStatus, 100);
-                    });
-                };
-    
-                checkStatus();
-            }
-        })
-        .catch(error => console.error("❌ خطأ في الطلب:", error));
+                                console.log("🔄 حالة التحميل:", statusData);
+            
+                                // ================= تحديث الدائرة فقط أثناء التنزيل =================
+                                if (statusData.status && typeof statusData.status.progress === "number" && statusData.status.status !== "done downloading") {
+                                    setProgress(Math.min(statusData.status.progress, 100));
+                                }
+            
+                                // ================= انتهاء التحميل =================
+                                if (
+                                    statusData.status &&
+                                    statusData.status.status === "done"
+                                ) {
+                                    let fileLinks = statusData.status.whole_file.map(f => `${api_link}/${f}`);
+                                    loadAudio(fileLinks[0]);
+                                } else if (statusData.status && statusData.status.status === "error") {
+                                    console.error("❌ حدث خطأ أثناء التحميل");
+                                } else {
+                                    setTimeout(checkStatus, 100);
+                                }
+                            })
+                            .catch(err => {
+                                console.error("❌ خطأ في جلب الحالة:", err);
+                                setTimeout(checkStatus, 100);
+                            });
+                        };
+            
+                        checkStatus();
+                    }
+                })
+                .catch(error => console.error("❌ خطأ في الطلب:", error));
+        }
+    });
 }
 
 // تنسيق الوقت
@@ -497,9 +511,9 @@ function formatTime(seconds) {
     const sec = Math.floor(seconds % 60);
 
     if (hrs > 0) {
-        return `${hrs}:${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
+        return `${hrs}:${min < 10 ? "0" + min : min}:${sec < 10 ? "0" + sec : sec}`;
     } else {
-        return `${min}:${sec < 10 ? '0' + sec : sec}`;
+        return `${min}:${sec < 10 ? "0" + sec : sec}`;
     }
 }
 
@@ -530,14 +544,12 @@ function pause() {
 // تغيير تقدم الشريط
 function makeProgress() {
     // تقدم الوقت الحالي
-    let elapsed = audio.currentTime || 0;
+    let elapsed = Math.floor(audio.currentTime) || 0;
     formatTime(elapsed) != currentTimeEl.textContent ? currentTimeEl.textContent = formatTime(elapsed) : null;
 
     // تقدم الشريط
     let percent = (elapsed / audioDuration) * 100;
     progressBar.value = elapsed;
-    progressBar.style.background = 
-    `linear-gradient(to right, #1DB954 0%, #3deb7a ${percent}%, #999 ${percent}%, #999 100%)`;
 
     let bufferPercent = 0;
     let bufferedEnd = bufferedAhead(audio);
@@ -563,7 +575,7 @@ function switchTo(time) {
 
 // الجزء المتوفر بدون شبكة
 function bufferedAhead(audio) {
-    let current = audio.currentTime;
+    let current = Math.floor(audio.currentTime) || 0;
   
     for (let i = 0; i < audio.buffered.length; i++) {
       let start = audio.buffered.start(i);
@@ -590,9 +602,130 @@ function active_speed(element) {
     audio.playbackRate = parseFloat(element.textContent);
 }
 
+// ========================================== تنزيل الصوت ==========================================================
+function openDB() { // فتح أو إنشاء قاعدة البيانات
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("audioDB", 1); // 1: رقم الإصدار
+        request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains("audios")) {
+                const store = db.createObjectStore("audios", { keyPath: "fileName" });
+                store.createIndex("title", "title", { unique: false });
+            }
+        };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+// التأكد من وجود الملف
+async function isAudioSaved(fileName) {
+    const db = await openDB();
+    return new Promise((resolve) => {
+        const tx = db.transaction("audios", "readonly");
+        const req = tx.objectStore("audios").get(fileName);
+        req.onsuccess = () => resolve(!!req.result);
+        req.onerror = () => resolve(false);
+    });
+}
+
+// تنزيل وحفظ الملف مع شريط تقدم
+async function saveAudioWithProgress(url, onProgress) {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("فشل التحميل");
+    const reader = resp.body.getReader();
+    const length = +resp.headers.get("Content-Length") || 0;
+    let received = 0, chunks = [];
+    while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        if (length) onProgress(Math.round(received / length * 100));
+    }
+    const blob = new Blob(chunks);
+    const fileName = url.split("/").pop();
+
+    // ناخد القيم من الصفحة
+    const title = audioTitle.textContent || fileName;
+    const thumbnailUrl = coverImg?.src;
+
+    // نزّل الصورة المصغرة لو موجودة
+    let thumbBlob = null;
+    if (thumbnailUrl) {
+        try {
+            const tResp = await fetch(thumbnailUrl);
+            thumbBlob = await tResp.blob();
+        } catch(e) {
+            console.warn("فشل تحميل الصورة المصغرة:", e);
+        }
+    }
+
+    const db = await openDB();
+    const tx = db.transaction("audios", "readwrite");
+    tx.objectStore("audios").put({ 
+        fileName,
+        blob,
+        title,
+        thumbnail: thumbBlob
+    }, fileName); // مهم نخزن باستخدام المفتاح fileName
+
+    return new Promise((res, rej) => {
+        tx.oncomplete = () => res(fileName);
+        tx.onerror = () => rej(tx.error);
+    });
+}
+
+// تشغيل من IndexedDB
+async function loadAndPlay(fileName) {
+    const db = await openDB();
+    const tx = db.transaction("audios","readonly");
+    const req = tx.objectStore("audios").get(fileName);
+    req.onsuccess = () => {
+        if (req.result) {
+            const url = URL.createObjectURL(req.result.blob);
+            loadAudio(url);
+
+            // عرض الاسم
+            if (req.result.title) {
+                audioTitle.textContent = req.result.title;
+                circle_audioTitle.innerText = req.result.title;
+            }
+
+            // عرض الصورة
+            if (req.result.thumbnail) {
+                const thumbUrl = URL.createObjectURL(req.result.thumbnail);
+                coverImg.src = thumbUrl;
+            }
+
+            downloadContainer.style.display = "none";
+        }
+    };
+}
+
+downloadButton.onclick = async () => {
+    downloadButton.style.display = "none";
+    
+    const src = audio.querySelector("source")?.src || audio.src;
+    if (!src) return alert("مفيش مصدر صوت.");
+
+    download_progressBar.style.display = "inline-block";
+    download_progressText.style.display = "inline";
+
+    try {
+        const fileName = await saveAudioWithProgress(src, percent => {
+            download_progressBar.value = percent;
+            download_progressText.textContent = percent + "%";
+        });
+
+        await loadAndPlay(fileName);
+    } catch (err) {
+        alert("حصل خطأ: " + err.message);
+    }
+}
+
 //  =============================================== النزول =========================================================
-// إظهار عند النزول
-function show_when_scroll(element, top = 70, height = -50) {
+function show_when_scroll(element, top = 70, height = -50) { // إظهار عند النزول
     const windowHeight = window.innerHeight;
     const boxTop = element.getBoundingClientRect().top;
     if (boxTop + top < windowHeight + height && boxTop > 60) {
@@ -628,11 +761,8 @@ function refresh_scrolling(elements) {
     call_show_recusive(0, elements);
 }
 
-
-
 // ============================================= الأحداث ============================================================
-// تفعيل قائمة
-const after_download_files = setInterval(() => {
+const after_download_files = setInterval(() => { // تفعيل قائمة
     if(done_download_files == 3) {
         active_footer_item(0);
         clearInterval(after_download_files);
@@ -718,7 +848,7 @@ let isPlaying = false;
 let audioDuration = 0;
 
 // زر التشغيل
-playButton.addEventListener('click', () => {
+playButton.addEventListener("click", () => {
     if(!isPlaying){
         play();
     } else {
@@ -738,7 +868,7 @@ setInterval(() => {
             pause();
         }
     }
-}, 100);
+}, 10);
 
 // تشغيل الصوت من خارج الموقع
 audio.addEventListener("play", () => {
@@ -753,7 +883,7 @@ audio.addEventListener("pause", () => {
 });
 
 // القفز عبر الشريط
-progressBar.addEventListener('input', () => {
+progressBar.addEventListener("input", () => {
     switchTo(Math.max(0, parseFloat(progressBar.value))); // الصوت
     makeProgress(); // الشريط
 });

@@ -27,7 +27,7 @@
     text-align: center;
 }
 
-.progress-bar {
+.controls .progress-bar {
     flex: 1;
     appearance: none;
     height: 6px;
@@ -37,7 +37,7 @@
     cursor: pointer;
 }
 
-.progress-bar::-webkit-slider-thumb {
+.controls .progress-bar::-webkit-slider-thumb {
     appearance: none;
     width: 24px;
     height: 14px;
@@ -48,7 +48,7 @@
     border: none;
 }
 
-.progress-bar::-moz-range-thumb {
+.controls .progress-bar::-moz-range-thumb {
     width: 24px;
     height: 14px;
     border-radius: 500px;
@@ -60,11 +60,30 @@
 
 /* العنوان */
 .audio-title {
-    text-align: right;
-    max-width: 70%;
+    text-align: center;
+    width: 70%;
     font-size: 26px;
     direction: rtl;
 }
+
+/* التنزيل */
+.download-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.download-container .download-btn {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 500px;
+    cursor: pointer;
+}
+/* .download-container .progress-bar {
+    background-color: red;
+} */
 
 /* السرعات */
 .speeds {
