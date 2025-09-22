@@ -277,6 +277,7 @@ function show_audios(eo) {
             fetch(`${api_link}/channel?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
             .then(response => response.json())
             .then(data => {
+                audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
                 if (data.error) {
                     console.error('حدث خطأ:', data.error);
                     return;
@@ -317,6 +318,8 @@ function show_audios(eo) {
             fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
             .then(response => response.json())
             .then(data => {
+                audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
+
                 if (data.error) {
                     console.error('حدث خطأ:', data.error);
                     return;

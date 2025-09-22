@@ -23,7 +23,7 @@ body {
 }
 
 .audio-title {
-    user-select: auto;
+    user-select: text;
 }
 
 /* الرئيسية */
