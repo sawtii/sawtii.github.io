@@ -433,7 +433,7 @@ function loadAudio(link) {
 // تنزيل المحاضرة وعرضها -- الأصل
 function openAudio(video_link, video_title) {
     audioTitle.textContent = video_title;
-    setYoutubeThumbnail(video_link.split("=")[1].split("&")[0]);
+    setYoutubeThumbnail(video_link.split("=").pop().split("&")[0]);
     
     let file_name = video_link.split("/").pop().split("=").pop() + ".m4a";
     isAudioSaved(file_name).then(exists => {
@@ -668,7 +668,7 @@ async function saveAudioWithProgress(url, onProgress) {
         blob,
         title,
         thumbnail: thumbBlob
-    }, fileName); // مهم نخزن باستخدام المفتاح fileName
+    }); // مهم نخزن باستخدام المفتاح fileName
 
     return new Promise((res, rej) => {
         tx.oncomplete = () => res(fileName);
