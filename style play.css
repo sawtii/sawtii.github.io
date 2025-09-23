@@ -74,6 +74,12 @@
     align-items: center;
 }
 
+.download-container .download-btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .download-container .download-btn {
     width: 20px;
     height: 20px;

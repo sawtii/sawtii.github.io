@@ -47,6 +47,8 @@ const downloadContainer = document.querySelector(".download-container");
 const downloadButton = downloadContainer.querySelector(".download-btn");
 const download_progressBar = downloadContainer.querySelector(".progress-bar");
 const download_progressText = downloadContainer.querySelector(".progress-text");
+const fileSizeCont = downloadContainer.querySelector(".download-btn-container");
+const fileSize = downloadContainer.querySelector(".file-size");
 
 // دوال عامة
 function search_by_key(arrOfObj, key, value) {
@@ -412,10 +414,11 @@ function setYoutubeThumbnail(videoId) {
 }
 
 // تحميل الصوت وعرضه
-function loadAudio(link) {
+async function loadAudio(link) {
     source.src = link;
     audio.load();
 
+    // عرض مدة الصوت
     new Promise(resolve => {
         audio.onloadedmetadata = () => resolve(audio.duration || 0);
         audio.onerror = () => resolve(0);
@@ -425,6 +428,31 @@ function loadAudio(link) {
         durationEl.textContent = formatTime(audioDuration);
         play();
     });
+
+    // محاولة معرفة الحجم
+    try {
+        let sizeBytes = 0;
+
+        if (link.startsWith("blob:")) { // متنزل
+            const res = await fetch(link);
+            const blob = await res.blob();
+            sizeBytes = blob.size;
+
+            downloadContainer.style.display = "none";
+        } else { // مش متنزل
+            const resp = await fetch(link, { method: "HEAD" });
+            sizeBytes = +resp.headers.get("Content-Length") || 0;
+        }
+
+        if (sizeBytes > 0 && !link.startsWith("blob:")) {
+            const sizeMB = formatMB(sizeBytes);
+            fileSize.textContent = `${sizeMB}MB`;
+            downloadContainer.style.display = "flex"; // تأكد إن العنصر ظاهر
+            fileSizeCont.style.display = "flex"; // تأكد إن العنصر ظاهر
+        }
+    } catch (e) {
+        console.warn("تعذر معرفة حجم الملف:", e);
+    }
 
     active_speed(speedsDiv.querySelector(".active"));
     showDiv("audio");
@@ -618,6 +646,19 @@ function openDB() { // فتح أو إنشاء قاعدة البيانات
     });
 }
 
+// حجم الملف
+async function get_file_size(url) {
+    const resp = await fetch(url, { method: "HEAD" });
+    if (!resp.ok) throw new Error("فشل في معرفة الحجم");
+    const length = +resp.headers.get("Content-Length") || 0;
+    return length; // بالبايت
+}
+
+// عدد الميجات المنزلة
+function formatMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(1); // رقم عشري واحد
+}
+
 // التأكد من وجود الملف
 async function isAudioSaved(fileName) {
     const db = await openDB();
@@ -641,16 +682,17 @@ async function saveAudioWithProgress(url, onProgress) {
         if (done) break;
         chunks.push(value);
         received += value.length;
-        if (length) onProgress(Math.round(received / length * 100));
+        if (length) {
+            const percent = Math.round(received / length * 100);
+            onProgress(percent, received, length);
+        }
     }
     const blob = new Blob(chunks);
     const fileName = url.split("/").pop();
 
-    // ناخد القيم من الصفحة
+    // تخزين
     const title = audioTitle.textContent || fileName;
     const thumbnailUrl = coverImg?.src;
-
-    // نزّل الصورة المصغرة لو موجودة
     let thumbBlob = null;
     if (thumbnailUrl) {
         try {
@@ -668,7 +710,7 @@ async function saveAudioWithProgress(url, onProgress) {
         blob,
         title,
         thumbnail: thumbBlob
-    }); // مهم نخزن باستخدام المفتاح fileName
+    });
 
     return new Promise((res, rej) => {
         tx.oncomplete = () => res(fileName);
@@ -704,7 +746,7 @@ async function loadAndPlay(fileName) {
 }
 
 downloadButton.onclick = async () => {
-    downloadButton.style.display = "none";
+    fileSizeCont.style.display = "none";
     
     const src = audio.querySelector("source")?.src || audio.src;
     if (!src) return alert("مفيش مصدر صوت.");
@@ -713,9 +755,16 @@ downloadButton.onclick = async () => {
     download_progressText.style.display = "inline";
 
     try {
-        const fileName = await saveAudioWithProgress(src, percent => {
+        const totalBytes = await get_file_size(src);
+        const totalMB = formatMB(totalBytes);
+
+        const fileName = await saveAudioWithProgress(src, (percent, received, length) => {
+            const receivedMB = formatMB(received);
+            const totalMBtxt = totalMB || formatMB(length);
+
+            console.log(received, receivedMB);
             download_progressBar.value = percent;
-            download_progressText.textContent = percent + "%";
+            download_progressText.textContent = `${percent}% (${receivedMB}/${totalMBtxt}MB)`;
         });
 
         await loadAndPlay(fileName);
