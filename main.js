@@ -82,7 +82,7 @@ function sortObjects(arr, key = "name") {
 }
 
 // بيانات الملفات
-let done_download_files = 0;
+let done_load_files = 0;
 let podcasts_data = [];
 let salasel_data = [];
 let courses_data = [];
@@ -92,7 +92,7 @@ function load_files_data() {
         .then(response => response.json())
         .then(data => {
             podcasts_data = sortObjects(data);
-            done_download_files += 1;
+            done_load_files += 1;
         })
         .catch(error => console.error("❌ خطأ في الطلب:", error));
         
@@ -100,7 +100,7 @@ function load_files_data() {
         .then(response => response.json())
         .then(data => {
             salasel_data = sortObjects(data);
-            done_download_files += 1;
+            done_load_files += 1;
         })
         .catch(error => console.error("❌ خطأ في الطلب:", error));
 
@@ -108,12 +108,54 @@ function load_files_data() {
         .then(response => response.json())
         .then(data => {
             courses_data = sortObjects(data);
-            done_download_files += 1;
+            done_load_files += 1;
         })
         .catch(error => console.error("❌ خطأ في الطلب:", error));
 }
 
 load_files_data();
+
+// روابط الحلقات
+let done_load_links = 0;
+let podcasts_links = {};
+let salasel_links = {};
+let courses_links = {};
+let all_links = {};
+
+function load_links_data() {
+    fetch(`${api_link}/data/إذاعة.json`)
+        .then(response => response.json())
+        .then(data => {
+            podcasts_links = data;
+            done_load_links += 1;
+        })
+        .catch(error => console.error("❌ خطأ في الطلب:", error));
+        
+    fetch(`${api_link}/data/سلاسل.json`)
+        .then(response => response.json())
+        .then(data => {
+            salasel_links = data;
+            done_load_links += 1;
+        })
+        .catch(error => console.error("❌ خطأ في الطلب:", error));
+
+    fetch(`${api_link}/data/محاضرون.json`)
+        .then(response => response.json())
+        .then(data => {
+            courses_links = data;
+            done_load_links += 1;
+        })
+        .catch(error => console.error("❌ خطأ في الطلب:", error));
+    
+    let all_links_interval = setInterval(() => {
+        if(done_load_links >= 3) {
+            all_links = {...podcasts_links, ...salasel_links, ...courses_links};
+            clearInterval(all_links_interval);
+        }
+    });
+}
+
+load_links_data();
 
 // ============================================== دوال الرئيسية =============================================================
 function back_click() { // الرجوع
@@ -280,91 +322,118 @@ function show_audios(eo) {
         showDiv("audios");
         active_page = `${audioDiv.dataset.type} audios`;
 
-        if(type == "channel") {
-            fetch(`${api_link}/channel?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
-            .then(response => response.json())
-            .then(data => {
-                audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
-                
-                if (data.error) {
-                    console.error("حدث خطأ:", data.error);
-                    return;
+        if(done_load_links >= 3 && JSON.stringify(all_links) != "{}") {
+            all_links.forEach((video, index) => {
+                if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                    // // استخراج videoId من الرابط
+                    // const thumbUrl = video.thumb;
+
+                    // تكوين العنصر
+                    const div = document.createElement("div");
+                    div.classList.add("audio-item");
+                    div.classList.add("choose-item");
+                    div.dataset.link = video.link;
+                    div.dataset.title = video.title || "بدون عنوان";
+                    // div.dataset.thumbnail = thumbUrl;
+
+                    div.innerHTML = `
+                    <img src="${thumbnail}" alt="Cover">
+                    <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
+                    `;
+
+                    // إضافة للحاوي
+                    audiosDiv.appendChild(div);
                 }
+            });
 
-                if(reverse == "true") {
-                    data.reverse();
-                }
-                
-                console.log("عدد المقاطع في القناة:", data.length);
-                data.forEach((video, index) => {
-                    if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
-                        // استخراج videoId من الرابط
-                        // const thumbUrl = video.thumb;
-
-                        // تكوين العنصر
-                        const div = document.createElement("div");
-                        div.classList.add("audio-item");
-                        div.classList.add("choose-item");
-                        div.dataset.link = video.link;
-                        div.dataset.title = video.title || "بدون عنوان";
-                        // div.dataset.thumbnail = thumbUrl;
-
-                        div.innerHTML = `
-                        <img src="${thumbnail}" alt="Cover">
-                        <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
-                        `;
-
-                        // إضافة للحاوي
-                        audiosDiv.appendChild(div);
+            scrolling();
+        } else {
+            if(type == "channel") {
+                fetch(`${api_link}/channel?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
+                .then(response => response.json())
+                .then(data => {
+                    audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
+                    
+                    if (data.error) {
+                        console.error("حدث خطأ:", data.error);
+                        return;
                     }
-                });
 
-                scrolling();
-            })
-            .catch(error => console.error("خطأ في الاتصال بـ API:", error));
-        } else if(type == "playlist") {
-            fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
-            .then(response => response.json())
-            .then(data => {
-                audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
-
-                if (data.error) {
-                    console.error("حدث خطأ:", data.error);
-                    return;
-                }
-
-                if(reverse == "true") {
-                    data.reverse();
-                }
-                
-                console.log("عدد المقاطع في القائمة:", data.length);
-                data.forEach((video, index) => {
-                    if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
-                        // استخراج videoId من الرابط
-                        // const thumbUrl = video.thumb;
-
-                        // تكوين العنصر
-                        const div = document.createElement("div");
-                        div.classList.add("audio-item");
-                        div.classList.add("choose-item");
-                        div.dataset.link = video.link;
-                        div.dataset.title = video.title || "بدون عنوان";
-                        // div.dataset.thumbnail = thumbUrl;
-
-                        div.innerHTML = `
-                        <img src="${thumbnail}" alt="Cover">
-                        <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
-                        `;
-
-                        // إضافة للكونتينر
-                        audiosDiv.appendChild(div);
+                    if(reverse == "true") {
+                        data.reverse();
                     }
-                });
+                    
+                    console.log("عدد المقاطع في القناة:", data.length);
+                    data.forEach((video, index) => {
+                        if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                            // // استخراج videoId من الرابط
+                            // const thumbUrl = video.thumb;
 
-                scrolling();
-            })
-            .catch(error => console.error("خطأ في الاتصال بـ API:", error));
-            
+                            // تكوين العنصر
+                            const div = document.createElement("div");
+                            div.classList.add("audio-item");
+                            div.classList.add("choose-item");
+                            div.dataset.link = video.link;
+                            div.dataset.title = video.title || "بدون عنوان";
+                            // div.dataset.thumbnail = thumbUrl;
+
+                            div.innerHTML = `
+                            <img src="${thumbnail}" alt="Cover">
+                            <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
+                            `;
+
+                            // إضافة للحاوي
+                            audiosDiv.appendChild(div);
+                        }
+                    });
+
+                    scrolling();
+                })
+                .catch(error => console.error("خطأ في الاتصال بـ API:", error));
+            } else if(type == "playlist") {
+                fetch(`${api_link}/playlist?url=${encodeURIComponent(link)}&links=true&titles=true&thumb=false`)
+                .then(response => response.json())
+                .then(data => {
+                    audiosDiv.innerHTML = ""; // نفرّغ المكان قبل ما نضيف العناصر
+
+                    if (data.error) {
+                        console.error("حدث خطأ:", data.error);
+                        return;
+                    }
+
+                    if(reverse == "true") {
+                        data.reverse();
+                    }
+                    
+                    console.log("عدد المقاطع في القائمة:", data.length);
+                    data.forEach((video, index) => {
+                        if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                            // // استخراج videoId من الرابط
+                            // const thumbUrl = video.thumb;
+
+                            // تكوين العنصر
+                            const div = document.createElement("div");
+                            div.classList.add("audio-item");
+                            div.classList.add("choose-item");
+                            div.dataset.link = video.link;
+                            div.dataset.title = video.title || "بدون عنوان";
+                            // div.dataset.thumbnail = thumbUrl;
+
+                            div.innerHTML = `
+                            <img src="${thumbnail}" alt="Cover">
+                            <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
+                            `;
+
+                            // إضافة للكونتينر
+                            audiosDiv.appendChild(div);
+                        }
+                    });
+
+                    scrolling();
+                })
+                .catch(error => console.error("خطأ في الاتصال بـ API:", error));
+                
+            }
         }
     }
 }
@@ -812,7 +881,7 @@ function refresh_scrolling(elements) {
 
 // ============================================= الأحداث ============================================================
 const after_download_files = setInterval(() => { // تفعيل قائمة
-    if(done_download_files == 3) {
+    if(done_load_files == 3) {
         active_footer_item(0);
         clearInterval(after_download_files);
     }
@@ -904,7 +973,6 @@ playButton.addEventListener("click", () => {
         pause();
     }
 });
-
 
 // تقدم الشريط
 setInterval(() => {
