@@ -123,7 +123,7 @@ let courses_links = {};
 let all_links = {};
 
 function load_links_data() {
-    fetch(`${api_link}/data/إذاعة.json`)
+    fetch(`${api_link}/data/podcasts.json`)
         .then(response => response.json())
         .then(data => {
             podcasts_links = data;
@@ -131,7 +131,7 @@ function load_links_data() {
         })
         .catch(error => console.error("❌ خطأ في الطلب:", error));
         
-    fetch(`${api_link}/data/سلاسل.json`)
+    fetch(`${api_link}/data/salasel.json`)
         .then(response => response.json())
         .then(data => {
             salasel_links = data;
@@ -139,7 +139,7 @@ function load_links_data() {
         })
         .catch(error => console.error("❌ خطأ في الطلب:", error));
 
-    fetch(`${api_link}/data/محاضرون.json`)
+    fetch(`${api_link}/data/courses.json`)
         .then(response => response.json())
         .then(data => {
             courses_links = data;
