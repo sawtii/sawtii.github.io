@@ -499,6 +499,9 @@ async function loadAudio(link) {
         progressBar.max = Math.floor(audioDuration);
         durationEl.textContent = formatTime(audioDuration);
         play();
+
+        active_speed(speedsDiv.querySelector(".active"));
+        showDiv("audio");
     });
 
     // محاولة معرفة الحجم
@@ -526,8 +529,6 @@ async function loadAudio(link) {
         console.warn("تعذر معرفة حجم الملف:", e);
     }
 
-    active_speed(speedsDiv.querySelector(".active"));
-    showDiv("audio");
 }
 
 // تنزيل المحاضرة وعرضها -- الأصل
@@ -802,6 +803,7 @@ async function loadAndPlay(fileName) {
     req.onsuccess = () => {
         if (req.result) {
             const url = URL.createObjectURL(req.result.blob);
+            console.log(222);
             loadAudio(url);
 
             // عرض الاسم
