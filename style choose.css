@@ -38,14 +38,6 @@
     background-color: var(--active);
 }
 
-.choose-div .choose-item img {
-    width: 80px;
-    height: auto;
-    object-fit: cover;  /* لو الصورة أكبر، يظبطها جوا الإطار */
-    border-radius: 10px;
-    /* background-color: red; */
-}
-
 .choose-div .choose-item h1 {
     font-size: 1.2rem;
     color: #000000;
@@ -68,9 +60,11 @@
     border-radius: 500px;
 }
 
-.courses-div .choose-item img {
+.choose-item img {
     height: 80px;
     width: auto;
+    object-fit: cover;  /* لو الصورة أكبر، يظبطها جوا الإطار */
+    border-radius: 10px;
     min-width: 80px;
     /* width: 142.21px; */
 }
