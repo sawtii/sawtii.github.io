@@ -183,6 +183,9 @@ function back_click() { // الرجوع
         footer.style.display = "";
         showDiv("audios");
         is_cancel = true;
+        setTimeout(() => {
+            is_cancel = false;
+        }, 100);
 
         if(audioDiv.dataset.type == "salasel") {
             active_page = "salasel audios";
@@ -323,7 +326,7 @@ function show_audios(eo) {
         active_page = `${audioDiv.dataset.type} audios`;
 
         if(done_load_links >= 3 && JSON.stringify(all_links) != "{}") {
-            all_links.forEach((video, index) => {
+            all_links[link].forEach((video, index) => {
                 if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                     // // استخراج videoId من الرابط
                     // const thumbUrl = video.thumb;
@@ -558,14 +561,18 @@ function openAudio(video_link, video_title) {
                     } else if (data.download_id) {       
                         const downloadId = data.download_id;
             
+                        console.log("not done");
                         const checkStatus = () => {
                             fetch(`${api_link}/status/${downloadId}`)
                             .then(res => res.json())
                             .then(statusData => {
+                                console.log("in status", is_cancel);
                                 if(is_cancel) {
                                     is_cancel = false;
                                     return;
                                 }
+
+                                console.log("in status");
     
                                 console.log("🔄 حالة التحميل:", statusData);
             
@@ -1030,11 +1037,11 @@ document.querySelectorAll(".after-ten, .before-ten").forEach(element => {
 document.addEventListener("keydown", function (event) {
     if(event.key == "Escape") { // الرجوع
         back_click();
-    } else if(event.key == "ArrowRight" && !audioDiv.classList.contains("active-div")) { // التنقل
+    } else if(event.key == "ArrowRight" && ["podcasts", "salasel", "courses"].includes(active_page) && !audioDiv.classList.contains("active-div")) { // التنقل
         let index = (footer_index(footer.querySelector(".active")) - 1) % 3;
         index < 0? index += 3 : "";
         active_footer_item(index);
-    } else if(event.key == "ArrowLeft" && !audioDiv.classList.contains("active-div")) { // التنقل
+    } else if(event.key == "ArrowLeft" && ["podcasts", "salasel", "courses"].includes(active_page) && !audioDiv.classList.contains("active-div")) { // التنقل
         active_footer_item((footer_index(footer.querySelector(".active")) + 1) % 3);
     } else if(event.key == "ArrowRight" && audioDiv.classList.contains("active-div")) { // تقديم الصوت
         audioDiv.querySelector(".after-ten").click();
