@@ -81,12 +81,10 @@
 }
 
 .download-container .download-btn {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 500px;
+    font-size: 20px;
     cursor: pointer;
 }
+
 /* .download-container .progress-bar {
     background-color: red;
 } */
