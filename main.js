@@ -803,8 +803,9 @@ async function loadAndPlay(fileName) {
     req.onsuccess = () => {
         if (req.result) {
             const url = URL.createObjectURL(req.result.blob);
-            console.log(222);
+            let last_time = audio.currentTime;
             loadAudio(url);
+            audio.currentTime = last_time;
 
             // عرض الاسم
             if (req.result.title) {
