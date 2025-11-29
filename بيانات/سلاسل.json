@@ -29,5 +29,25 @@
                 "thumbnail": "https://i.ytimg.com/vi/COogWP0kKCc/hqdefault.jpg"
             }
         ]
-    }
+    },
+    {
+        "name": "فهدى",
+        "photo": "./صور مصغرة/فهدى.jpg",
+        "courses": [
+            {
+                "name": "فهدى الموسم 1",
+                "type": "playlist",
+                "reverse": false,
+                "link": "https://www.youtube.com/playlist?list=PLa5m5PP9B4pz2TIxrpPcq4bLD5_ZduJ62",
+                "thumbnail": "./صور مصغرة/فهدى.jpg"
+            },
+            {
+                "name": "فهدى الموسم 2",
+                "type": "playlist",
+                "reverse": false,
+                "link": "https://www.youtube.com/playlist?list=PLa5m5PP9B4pwQdnegsMmOsrYhAeaEOx6s",
+                "thumbnail": "./صور مصغرة/فهدى.jpg"
+            }
+        ]
+    },
 ]
