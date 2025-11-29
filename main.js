@@ -486,7 +486,7 @@ function setYoutubeThumbnail(videoId) {
 }
 
 // تحميل الصوت وعرضه
-async function loadAudio(link) {
+async function loadAudio(link, want_play = true) {
     source.src = link;
     audio.load();
 
@@ -498,7 +498,7 @@ async function loadAudio(link) {
         audioDuration = duration;
         progressBar.max = Math.floor(audioDuration);
         durationEl.textContent = formatTime(audioDuration);
-        play();
+        if(want_play) play();
 
         active_speed(speedsDiv.querySelector(".active"));
         showDiv("audio");
@@ -804,7 +804,7 @@ async function loadAndPlay(fileName) {
         if (req.result) {
             const url = URL.createObjectURL(req.result.blob);
             let last_time = audio.currentTime;
-            loadAudio(url);
+            loadAudio(url, !audio.paused);
             audio.currentTime = last_time;
 
             // عرض الاسم
@@ -820,9 +820,6 @@ async function loadAndPlay(fileName) {
             }
 
             downloadContainer.style.display = "none";
-            download_progressText.style.display = "none";
-            download_progressText.innerHTML = "0%";
-            download_progressBar.value = 0;
         }
     };
 }
@@ -848,7 +845,7 @@ downloadButton.onclick = async () => {
             download_progressBar.value = percent;
             download_progressText.textContent = `${percent}% (${receivedMB}/${totalMBtxt}MB)`;
         });
-        
+
         await loadAndPlay(fileName);
     } catch (err) {
         alert("حصل خطأ: " + err.message);
@@ -1077,4 +1074,3 @@ document.addEventListener("keydown", function (event) {
         console.log("Enter pressed");
     }
 });
-
