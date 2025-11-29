@@ -820,6 +820,9 @@ async function loadAndPlay(fileName) {
             }
 
             downloadContainer.style.display = "none";
+            download_progressText.style.display = "none";
+            download_progressText.innerHTML = "0%";
+            download_progressBar.value = 0;
         }
     };
 }
@@ -845,7 +848,7 @@ downloadButton.onclick = async () => {
             download_progressBar.value = percent;
             download_progressText.textContent = `${percent}% (${receivedMB}/${totalMBtxt}MB)`;
         });
-
+        
         await loadAndPlay(fileName);
     } catch (err) {
         alert("حصل خطأ: " + err.message);
@@ -1074,3 +1077,4 @@ document.addEventListener("keydown", function (event) {
         console.log("Enter pressed");
     }
 });
+
