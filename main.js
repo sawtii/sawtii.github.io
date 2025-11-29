@@ -796,7 +796,7 @@ async function saveAudioWithProgress(url, onProgress) {
 }
 
 // تشغيل من IndexedDB
-async function loadAndPlay(fileName) {
+async function loadAndPlay(fileName, want_play = true) {
     const db = await openDB();
     const tx = db.transaction("audios","readonly");
     const req = tx.objectStore("audios").get(fileName);
@@ -804,7 +804,7 @@ async function loadAndPlay(fileName) {
         if (req.result) {
             const url = URL.createObjectURL(req.result.blob);
             let last_time = audio.currentTime;
-            loadAudio(url, !audio.paused);
+            loadAudio(url, want_play);
             audio.currentTime = last_time;
 
             // عرض الاسم
@@ -846,7 +846,7 @@ downloadButton.onclick = async () => {
             download_progressText.textContent = `${percent}% (${receivedMB}/${totalMBtxt}MB)`;
         });
 
-        await loadAndPlay(fileName);
+        await loadAndPlay(fileName, !audio.paused);
     } catch (err) {
         alert("حصل خطأ: " + err.message);
     }
