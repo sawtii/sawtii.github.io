@@ -314,11 +314,11 @@ function show_people_of(people_of = "courses|salasel", download_mode = false) {
                             `;
                         }
 
-                        if(peopleDiv.innerHTML == "") { // لو كان الشخص ليس لديه حلقات منزلة
+                        if(i == data.length - 1 && course_i == person.courses.length - 1 && peopleDiv.innerHTML == "") { // لو كان الشخص ليس لديه حلقات منزلة
                             peopleDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة هنا</p>`;
                         }
 
-                        if(i == data.length - 1) scrolling();
+                        if(i == data.length - 1 && course_i == person.courses.length - 1) scrolling();
                     }
                 });
             }
@@ -410,7 +410,7 @@ function show_courses(courses, download_mode = false) {
                     `;
                 }
 
-                if(coursesDiv.innerHTML == "") { // لو كانت الدورة ليس فيها حلقات منزلة
+                if(i == courses.length - 1 && coursesDiv.innerHTML == "") { // لو كانت الدورة ليس فيها حلقات منزلة
                     if(coursesDiv.dataset.type == "salasel") {
                         coursesDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة في أي سلسلة</p>`;
                     } else {
@@ -508,7 +508,7 @@ function show_audios(eo_target, download_mode = false) {
                     scrolling();
                 };
             });
-            return; // إيقاف باقي الكود
+            return; // إيقاف الباقي
         }
 
         if(done_load_links >= 3 && JSON.stringify(all_links) != "{}" && link in all_links) {
