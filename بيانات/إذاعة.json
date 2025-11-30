@@ -14,7 +14,7 @@
     {
         "name": "إيه المشكلة",
         "type": "channel",
-        "condition": "المشكلة في",
+        "condition": "؟",
         "link": "https://www.youtube.com/@Eh_El_Moshkla/videos",
         "thumbnail": "https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj"
     },

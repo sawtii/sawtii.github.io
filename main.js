@@ -11,6 +11,7 @@ const audioDiv = document.querySelector(".audio-div");
 // =================== الرئيسة ====================
 const homeBar = document.querySelector(".home");
 const back = homeBar.querySelector(".back");
+const downloads = homeBar.querySelector(".downloads");
 const logo = homeBar.querySelector(".logo");
 
 const footer = document.querySelector(".footer");
@@ -18,6 +19,7 @@ const footer_podcasts = footer.querySelector(".item.podcasts");
 const footer_salasel = footer.querySelector(".item.salasel");
 const footer_courses = footer.querySelector(".item.courses");
 let active_page = "";
+let download_mode = false;
 
 // ==================== الصوت ===================
 const coverImg = audioDiv.querySelector(".cover-image img");
@@ -158,7 +160,32 @@ function load_links_data() {
 load_links_data();
 
 // ============================================== دوال الرئيسية =============================================================
-function back_click() { // الرجوع
+function refresh_page() { // إعادة تحميل الصفحة (خاصية إظهار التنزيلات)
+    let activeDiv = document.querySelector(".active-div");
+    let div_name = activeDiv.classList[1];
+
+    if(div_name == "people-div") { // المحاضرات والسلاسل (الرئيسية)
+        let type = activeDiv.dataset.type; // courses || salasel
+        showDiv("people", type);
+    } else if(div_name == "podcasts-div") { // الإذاعة (الرئيسية)
+        showDiv("podcasts");
+    } else if(div_name == "courses-div") { // (فرع)
+        let course = activeDiv.dataset.name;
+        let index = search_by_key(courses_data, "name", getParent(courses_data, course) || course);
+        if(index >= 0) show_courses(courses_data[index]["courses"], download_mode);
+        if(index < 0) {
+            index = search_by_key(salasel_data, "name", getParent(salasel_data, course) || course);
+            show_courses(salasel_data[index]["courses"], download_mode);
+        }
+    } else if(div_name == "audios-div") {
+        show_audios(document.querySelector(`.choose-item[data-name="${activeDiv.dataset.name}"]`), download_mode);
+    }
+}
+
+// الرجوع
+function back_click() {
+    downloads.style.display = "flex";
+
     if(active_page.includes("inner") || active_page == "podcasts audios") {
         active_footer_item(footer_index(footer.querySelector(`.item.${audioDiv.dataset.type}`)));
         back.style.display = "none";
@@ -169,12 +196,12 @@ function back_click() { // الرجوع
         let type = audiosDiv.dataset.type;
         if(type == "courses") {
             active_page = "courses inner";
-            let index = search_by_key(courses_data, "name", name);
-            show_courses(courses_data[index]["courses"]);
+            let index = search_by_key(courses_data, "name", getParent(courses_data, name) || name);
+            show_courses(courses_data[index]["courses"], download_mode);
         } else if(type == "salasel") {
             active_page = "salasel inner";
-            let index = search_by_key(salasel_data, "name", name);
-            show_courses(salasel_data[index]["courses"]);
+            let index = search_by_key(salasel_data, "name", getParent(salasel_data, name) || name);
+            show_courses(salasel_data[index]["courses"], download_mode);
         }
     } else if(active_page.includes("audio")) {
         audio.querySelector("source").src = "";
@@ -199,11 +226,12 @@ function back_click() { // الرجوع
     }
 }
 
-// تفعيل قائمة
+// فهرس القائمة
 function footer_index(item) {
     return Array.from(footer.querySelectorAll(".item")).indexOf(item);
 }
 
+// تفعيل قائمة
 function active_footer_item(index) {
     let items = [footer_courses, footer_salasel, footer_podcasts];
     let item = items[index];
@@ -222,6 +250,17 @@ function active_footer_item(index) {
     }
 }
 
+// مؤدي الدورة
+function getParent(list, courseName) { // الداء والدواء => علاء حامد
+    for (const parent of list) {
+        if (parent.courses.some(c => c.name === courseName)) {
+            return parent.name;
+        }
+    }
+
+    return null;
+}
+
 // إظهار قائمة: إذاعة - سلاسل - محاضرات
 function showDiv(div_name, info = "") {
     let divs = [peopleDiv, podcastsDiv, coursesDiv, audiosDiv, circleDiv, audioDiv];
@@ -237,85 +276,185 @@ function showDiv(div_name, info = "") {
         audiosDiv.dataset.type = div_name;
         audioDiv.dataset.type = div_name;
 
-        show_podcasts();
+        show_podcasts(download_mode);
     } else if(div_name == "people") {
         peopleDiv.dataset.type = info;
         coursesDiv.dataset.type = info;
         audiosDiv.dataset.type = info;
         audioDiv.dataset.type = info;
 
-        show_people_of(info);
+        show_people_of(info, download_mode);
     }
 }
 
-// إظهار محاضرو المحاضرات والسلاسل
-function show_people_of(people_of = "courses|salasel") {
+// إظهار محاضرو المحاضرات والسلاسل (الرئيسية)
+function show_people_of(people_of = "courses|salasel", download_mode = false) {
     peopleDiv.innerHTML = "";
     
     let data = people_of == "courses"? courses_data : (people_of == "salasel"? salasel_data : "");
-    for(let i in data) {
-        let item = data[i];
+    if(download_mode) {
+        for(let i in data) {
+            let person = data[i];
+            let has_any = false;
 
-        peopleDiv.innerHTML += `
-        <div class="choose-item people-item" data-name="${item.name}" data-photo="${item.photo}">
-            <img src="${item.photo}" alt="Cover">
-            <h1 dir="rtl">${item.name}</h1>
-        </div>
-        `;
+            for(let course_i in person.courses) {
+                let course = person.courses[course_i];
+                let condition = course.condition || "";
+                
+                isDownloaded(course.link, condition).then((is_data) => {
+                    if(is_data) has_any = true;
+
+                    if(course_i == person.courses.length - 1) {
+                        if(has_any) { // لو الشخص لديه حلقات منزلة
+                            peopleDiv.innerHTML += `
+                            <div class="choose-item people-item" data-name="${person.name}" data-photo="${person.photo}">
+                                <img src="${person.photo}" alt="Cover">
+                                <h1 dir="rtl">${person.name}</h1>
+                            </div>
+                            `;
+                        }
+
+                        if(peopleDiv.innerHTML == "") { // لو كان الشخص ليس لديه حلقات منزلة
+                            peopleDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة هنا</p>`;
+                        }
+
+                        if(i == data.length - 1) scrolling();
+                    }
+                });
+            }
+        }
+    } else {
+        for(let i in data) {
+            let person = data[i];
+
+            peopleDiv.innerHTML += `
+            <div class="choose-item people-item" data-name="${person.name}" data-photo="${person.photo}">
+                <img src="${person.photo}" alt="Cover">
+                <h1 dir="rtl">${person.name}</h1>
+            </div>
+            `;
+        }
+
+        scrolling();
     }
-
-    scrolling();
 }
 
-// إظهار قائمة الإذاعة
-function show_podcasts() {
+// إظهار قائمة الإذاعة (الرئيسية)
+function show_podcasts(download_mode = false) {
     podcastsDiv.innerHTML = "";
-    for(let i in podcasts_data) {
-        let item = podcasts_data[i];
+    
+    if(download_mode) {
+        for(let i in podcasts_data) {
+            let item = podcasts_data[i];
+            let condition = item.condition || "";
+        
+            isDownloaded(item.link, condition).then((is_data) => {
+                if(is_data) { // لو الإذاعة فيها حلقات منزلة
+                    podcastsDiv.innerHTML += `
+                    <div class="choose-item podcast-item" data-type="${item.type}" data-name="${item.name}" data-condition="${item.condition || ""}" data-reverse="${item.reverse == true? true : false}" data-link="${item.link}" data-thumbnail="${item.thumbnail}">
+                        <img src="${item.thumbnail}" alt="Cover">
+                        <h1 dir="rtl">${item.name}</h1>
+                    </div>
+                    `;
+                }
 
-        podcastsDiv.innerHTML += `
-        <div class="choose-item podcast-item" data-type="${item.type}" data-name="${item.name}" data-reverse="${item.reverse == true? true : false}" data-link="${item.link}" data-thumbnail="${item.thumbnail}">
-            <img src="${item.thumbnail}" alt="Cover">
-            <h1 dir="rtl">${item.name}</h1>
-        </div>
-        `;
+                
+                if(i == podcasts_data.length - 1) {
+                    if(podcastsDiv.innerHTML == "") { // لو كانت الإذاعة ليس فيها حلقات منزلة
+                        podcastsDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة في أي إذاعة</p>`;
+                    }
+
+                    scrolling();
+                }
+            });
+        }
+    } else {
+        for(let i in podcasts_data) {
+            let item = podcasts_data[i];
+
+            podcastsDiv.innerHTML += `
+            <div class="choose-item podcast-item" data-type="${item.type}" data-name="${item.name}" data-condition="${item.condition || ""}" data-reverse="${item.reverse == true? true : false}" data-link="${item.link}" data-thumbnail="${item.thumbnail}">
+                <img src="${item.thumbnail}" alt="Cover">
+                <h1 dir="rtl">${item.name}</h1>
+            </div>
+            `;
+        }
+
+        scrolling();
     }
 
-    scrolling();
 }
 
-// إظهار قائمة الدورات
-function show_courses(courses) {
+// إظهار قائمة الدورات (الفرع)
+function show_courses(courses, download_mode = false) {
     coursesDiv.innerHTML = "";
-    for(let i in courses) {
-        let item = courses[i];
-        
-        let name = item.name;
-        let type = item.type;
-        let reverse = item.reverse || "false";
-        let link = item.link;
-        let thumbnail = item.thumbnail;
 
-        coursesDiv.innerHTML += `
-        <div class="choose-item course-item" data-type="${type}" data-name="${name}" data-reverse="${reverse}" data-link="${link}" data-thumbnail="${thumbnail}">
-            <img src="${thumbnail}" alt="Cover">
-            <h1 dir="rtl">${name}</h1>
-        </div>
-        `;
+    if(download_mode) {
+        for(let i in courses) {
+            let item = courses[i];
+            
+            let name = item.name;
+            let type = item.type;
+            let reverse = item.reverse || "false";
+            let condition = item.condition || "";
+            let link = item.link;
+            let thumbnail = item.thumbnail;
+
+            isDownloaded(link, condition).then((is_data) => {
+                if(is_data) { // لو الدورة فيها حلقات منزلة
+                    coursesDiv.innerHTML += `
+                    <div class="choose-item course-item" data-type="${type}" data-name="${name}" data-reverse="${reverse}" data-link="${link}" data-thumbnail="${thumbnail}">
+                        <img src="${thumbnail}" alt="Cover">
+                        <h1 dir="rtl">${name}</h1>
+                    </div>
+                    `;
+                }
+
+                if(coursesDiv.innerHTML == "") { // لو كانت الدورة ليس فيها حلقات منزلة
+                    if(coursesDiv.dataset.type == "salasel") {
+                        coursesDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة في أي سلسلة</p>`;
+                    } else {
+                        coursesDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة في أي دورة</p>`;
+                    }
+                }
+                
+                if(i == courses.length - 1) scrolling();
+            });
+        }
+    } else {
+        for(let i in courses) {
+            let item = courses[i];
+            
+            let name = item.name;
+            let type = item.type;
+            let reverse = item.reverse || "false";
+            let link = item.link;
+            let thumbnail = item.thumbnail;
+
+            coursesDiv.innerHTML += `
+            <div class="choose-item course-item" data-type="${type}" data-name="${name}" data-reverse="${reverse}" data-link="${link}" data-thumbnail="${thumbnail}">
+                <img src="${thumbnail}" alt="Cover">
+                <h1 dir="rtl">${name}</h1>
+            </div>
+            `;
+        }
+
+        scrolling();
     }
-
-    scrolling();
 }
 
 // إظهار محاضرات الـ دورة/سلسلة/إذاعة
-function show_audios(eo) {
-    let item = eo.target.closest(".choose-item");
-
+function show_audios(eo_target, download_mode = false) {
+    let item = eo_target.closest(".choose-item");
+    
     if(item) {
+        let name = item.dataset.name;
+        coursesDiv.dataset.name = name;
+        audiosDiv.dataset.name = name;
+
         back.style.display = "flex";
         
         let link = item.dataset.link;
-        let name = item.dataset.name;
         let thumbnail = item.dataset.thumbnail;
         let type = item.dataset.type;
         let condition = item.dataset.condition || "";
@@ -325,9 +464,57 @@ function show_audios(eo) {
         showDiv("audios");
         active_page = `${audioDiv.dataset.type} audios`;
 
+        if(download_mode) {
+            openDB().then(db => {
+                const tx = db.transaction("audios", "readonly");
+                tx.objectStore("audios").getAll().onsuccess = (e) => {
+                    const downloadedFiles = e.target.result;
+                    
+                    // جلب جميع الحلقات أولاً
+                    let allVideos = [];
+                    
+                    if(done_load_links >= 3 && JSON.stringify(all_links) != "{}") {
+                        allVideos = all_links[link] || [];
+                    }
+                    
+                    // عرض الحلقات المنزلة فقط
+                    allVideos.forEach((video) => {
+                        if (video.link) {
+                            const videoId = video.link.split("/").pop().split("=").pop() + ".m4a";
+                            const isDownloaded = downloadedFiles.some(f => f.fileName === videoId);
+                            
+                            if(isDownloaded && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                                const div = document.createElement("div");
+                                div.classList.add("audio-item");
+                                div.classList.add("choose-item");
+                                div.classList.add("downloaded"); // 🆕 علامة للتمييز
+                                div.dataset.link = video.link;
+                                div.dataset.title = video.title || "بدون عنوان";
+
+                                div.innerHTML = `
+                                <img src="${thumbnail}" alt="Cover">
+                                <h1 dir="rtl">${video.title || "بدون عنوان"}</h1>
+                                `;
+
+                                audiosDiv.appendChild(div);
+                            }
+                        }
+                    });
+                    
+                    if(audiosDiv.children.length === 0) {
+                        audiosDiv.innerHTML = `<p style="text-align: center; padding: 50px; color: #999;">لا توجد حلقات منزلة</p>`;
+                    }
+                    
+                    scrolling();
+                };
+            });
+            return; // إيقاف باقي الكود
+        }
+
         if(done_load_links >= 3 && JSON.stringify(all_links) != "{}") {
             all_links[link].forEach((video, index) => {
                 if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+
                     // // استخراج videoId من الرابط
                     // const thumbUrl = video.thumb;
 
@@ -545,7 +732,9 @@ function openAudio(video_link, video_title) {
             return;
         } else {
             circle_audioTitle.innerText = video_title;
+            downloads.style.display = "none";
             showDiv("circle");
+
             setProgress(0);
             fetch(`${api_link}/url?link=${video_link}`)
                 .then(response => response.json())
@@ -707,6 +896,42 @@ function active_speed(element) {
     audio.playbackRate = parseFloat(element.textContent);
 }
 
+// =================================================== الأصوات المنزلة ===================================================
+async function getDownloaded() { // الأصوات المنزلة (id.m4a)
+    const db = await openDB();
+    const tx = db.transaction("audios", "readonly");
+    const request = tx.objectStore("audios").getAllKeys();
+    
+    return new Promise((resolve) => {
+        request.onsuccess = () => {
+            // إزالة .m4a من كل fileName للحصول على video_id فقط
+            const videoIds = request.result.map(fileName => fileName.replace(".m4a", "").split(".")[0]);
+            resolve(videoIds);
+        };
+        request.onerror = () => resolve([]);
+    });
+}
+
+// دالة للتحقق إذا كانت الإذاعة/الدورة/السلسلة تحتوي على حلقات منزلة
+async function isDownloaded(listLink, condition = "") {
+    const downloadedIds = await getDownloaded();
+    
+    // التحقق من all_links أولاً
+    if(done_load_links >= 3 && all_links[listLink]) {
+        const episodes = all_links[listLink];
+        return episodes.some(video => {
+            if(video.link && video.title.includes(condition)) {
+                const videoId = video.link.split("/").pop().split("=").pop();
+                return downloadedIds.includes(videoId);
+            }
+
+            return false;
+        });
+    }
+    
+    return false;
+}
+
 // ========================================== تنزيل الصوت ==========================================================
 function openDB() { // فتح أو إنشاء قاعدة البيانات
     return new Promise((resolve, reject) => {
@@ -841,7 +1066,6 @@ downloadButton.onclick = async () => {
             const receivedMB = formatMB(received);
             const totalMBtxt = totalMB || formatMB(length);
 
-            console.log(received, receivedMB);
             download_progressBar.value = percent;
             download_progressText.textContent = `${percent}% (${receivedMB}/${totalMBtxt}MB)`;
         });
@@ -864,7 +1088,7 @@ function show_when_scroll(element, top = 70, height = -50) { // إظهار عن�
 }
 
 function call_show_recusive(index, elements) {
-    show_when_scroll(elements[index]);
+    if(elements.length > 0) show_when_scroll(elements[index]);
 
     if(index+1 < elements.length) {
         setTimeout(() => {
@@ -911,6 +1135,14 @@ logo.onclick = () => {
     back.style.display = "none";
 }
 
+// التنزيلات
+downloads.onclick = () => {
+    if(download_mode) {download_mode = false; downloads.querySelector("img").src = "./صور/التنزيلات.png";}
+    else {download_mode = true; downloads.querySelector("img").src = "./صور/الكل.png";}
+
+    refresh_page();
+}
+
 // الرجوع
 back.style.display = "none";
 back.onclick = () => {
@@ -919,6 +1151,8 @@ back.onclick = () => {
 
 let is_cancel = false;
 circleContainer.onclick = () => {
+    downloads.style.display = "flex";
+
     showDiv("audios");
     active_page += "s";
     is_cancel = true;
@@ -946,17 +1180,17 @@ peopleDiv.onclick = (eo) => {
         if(type == "courses") {
             active_page = "courses inner";
             let index = search_by_key(courses_data, "name", name);
-            show_courses(courses_data[index]["courses"]);
+            show_courses(courses_data[index]["courses"], download_mode);
         } else if(type == "salasel") {
             active_page = "salasel inner";
             let index = search_by_key(salasel_data, "name", name);
-            show_courses(salasel_data[index]["courses"]);
+            show_courses(salasel_data[index]["courses"], download_mode);
         }
     }
 }
 
-podcastsDiv.onclick = (eo) => {show_audios(eo);}
-coursesDiv.onclick = (eo) => {show_audios(eo);}
+podcastsDiv.onclick = (eo) => {show_audios(eo.target, download_mode);}
+coursesDiv.onclick = (eo) => {show_audios(eo.target, download_mode);}
 
 audiosDiv.onclick = (eo) => {
     active_page = `${audioDiv.dataset.type} audio`;
@@ -966,6 +1200,7 @@ audiosDiv.onclick = (eo) => {
     if(item) {
         let link = item.dataset.link;
         let title = item.dataset.title;
+        downloads.style.display = "none";
 
         openAudio(link, title);
     }
@@ -1063,6 +1298,14 @@ document.addEventListener("keydown", function (event) {
         }
     } else if("12345".includes(event.key) && audioDiv.classList.contains("active-div")) { // السرعات
         speeds["12345".indexOf(event.key)].click();
+    }
+
+    // خيار إظهار التنزيلات
+    else if(event.code == "KeyD") {
+        if(download_mode) {download_mode = false; downloads.querySelector("img").src = "./صور/التنزيلات.png";}
+        else {download_mode = true; downloads.querySelector("img").src = "./صور/الكل.png";}
+
+        refresh_page();
     }
 
     // اختيار

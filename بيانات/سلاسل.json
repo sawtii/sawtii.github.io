@@ -1,7 +1,7 @@
 [
     {
         "name": "إيه المشكلة",
-        "photo": "https://yt3.googleusercontent.com/4mGekhSGJqSuZuRV0U664_zvkYVNu1eex45SKxvkLbE1zgXKtVuSLccNxjxv96J6ZynXHuCact0=s160-c-k-c0x00ffffff-no-rj",
+        "photo": "./صور مصغرة/إيه المشكلة.jpg",
         "courses": [
             {
                 "name": "عالمغرب الموسم 1",
@@ -25,7 +25,7 @@
                 "name": "مكارم",
                 "type": "playlist",
                 "reverse": false,
-                "link": "https://www.youtube.com/playlist?list=PLlXQj2VGUTmdN73dvFG17xdOCoM2E1K66",
+                "link": "https://www.youtube.com/playlist?list=PL_ZXIiZMp3MIfHSF4btr6lXNuQI4IKYqI",
                 "thumbnail": "https://i.ytimg.com/vi/COogWP0kKCc/hqdefault.jpg"
             }
         ]

@@ -55,6 +55,20 @@ body {
     cursor: pointer;
 }
 
+.downloads {
+    position: absolute;
+    top: calc(50% - 25px);
+    width: 50px;
+    height: 50px;
+    right: 2%;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.downloads img {
+    width: 50px;
+}
+
 .logo {
     width: 160px;
     height: 70px;
