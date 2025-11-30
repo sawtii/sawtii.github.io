@@ -511,7 +511,7 @@ function show_audios(eo_target, download_mode = false) {
             return; // إيقاف باقي الكود
         }
 
-        if(done_load_links >= 3 && JSON.stringify(all_links) != "{}") {
+        if(done_load_links >= 3 && JSON.stringify(all_links) != "{}" && link in all_links) {
             all_links[link].forEach((video, index) => {
                 if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
 
