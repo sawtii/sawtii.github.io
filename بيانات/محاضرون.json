@@ -9,6 +9,13 @@
                 "reverse": false,
                 "link": "https://www.youtube.com/playlist?list=PL1i_D1Vw3d5PBeIjJipobiLY1y4VKyg9c",
                 "thumbnail": "https://alaa-hamed-courses.github.io/public/%D8%B5%D9%88%D8%B1/%D8%A7%D9%84%D8%AF%D8%A7%D8%A1%20%D9%88%D8%A7%D9%84%D8%AF%D9%88%D8%A7%D8%A1.png"
+            },
+            {
+                "name": "السيرة النبوية",
+                "type": "playlist",
+                "reverse": false,
+                "link": "https://www.youtube.com/playlist?list=PL1i_D1Vw3d5MJuAkduJ6TaiGEVac6GePK",
+                "thumbnail": "https://i.ytimg.com/vi/DH0vF7DsiE8/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDWSOYY53YhmH9MicxjBIfXn5vkvA"
             }
         ]
     }
