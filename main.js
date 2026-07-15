@@ -483,7 +483,7 @@ function show_audios(eo_target, download_mode = false) {
                             const videoId = video.link.split("/").pop().split("=").pop() + ".m4a";
                             const isDownloaded = downloadedFiles.some(f => f.fileName === videoId);
                             
-                            if(isDownloaded && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                            if(isDownloaded && video.title && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                                 const div = document.createElement("div");
                                 div.classList.add("audio-item");
                                 div.classList.add("choose-item");
@@ -513,7 +513,7 @@ function show_audios(eo_target, download_mode = false) {
 
         if(done_load_links >= 3 && JSON.stringify(all_links) != "{}" && link in all_links) {
             all_links[link].forEach((video, index) => {
-                if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                if (video.link && video.title && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
 
                     // // استخراج videoId من الرابط
                     // const thumbUrl = video.thumb;
@@ -555,7 +555,7 @@ function show_audios(eo_target, download_mode = false) {
                     
                     console.log("عدد المقاطع في القناة:", data.length);
                     data.forEach((video, index) => {
-                        if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                        if (video.link && video.title && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                             // // استخراج videoId من الرابط
                             // const thumbUrl = video.thumb;
 
@@ -597,7 +597,7 @@ function show_audios(eo_target, download_mode = false) {
                     
                     console.log("عدد المقاطع في القائمة:", data.length);
                     data.forEach((video, index) => {
-                        if (video.link && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
+                        if (video.link && video.title && (video.title.includes("[Deleted video]") || video.title.includes("[Private video]")) == false && (condition == "" || video.title.includes(condition))) {
                             // // استخراج videoId من الرابط
                             // const thumbUrl = video.thumb;
 
@@ -920,7 +920,7 @@ async function isDownloaded(listLink, condition = "") {
     if(done_load_links >= 3 && all_links[listLink]) {
         const episodes = all_links[listLink];
         return episodes.some(video => {
-            if(video.link && video.title.includes(condition)) {
+            if(video.link && video.title && video.title.includes(condition)) {
                 const videoId = video.link.split("/").pop().split("=").pop();
                 return downloadedIds.includes(videoId);
             }
